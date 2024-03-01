@@ -1,0 +1,14 @@
+schema: 
+  - server/schema.graphql
+generates:
+  ./server/types/schema-ready.graphql:
+    plugins:
+      - schema-ast    
+  ./server/types/resolvers.ts:
+    documents: [server/documents/**/*]
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-resolvers  
+      - fragment-matcher
+      - typescript-react-apollo

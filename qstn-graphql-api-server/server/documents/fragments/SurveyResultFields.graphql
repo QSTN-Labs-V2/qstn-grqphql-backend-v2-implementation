@@ -1,0 +1,32 @@
+fragment SurveyResultFields on SurveyResult {
+  resultsId
+  result
+  user {
+    ...UserFields
+  }
+  survey {
+    surveyId
+    resultsId
+    title
+    description
+    logo
+    surveyType
+    surveyStatus
+    pages {
+      name
+      title
+    }
+    funded
+  }
+  claimId
+  rewardId
+  rewardType
+  rewardClaimed
+  rewardClaimedAt
+  mediaClaimed
+  mediaClaimedAt
+  chainId
+  score
+  credibilityScore
+  createdAt
+}

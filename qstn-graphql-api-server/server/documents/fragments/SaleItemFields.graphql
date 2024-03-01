@@ -1,0 +1,11 @@
+fragment SaleItemFields on SaleItem {
+  productId
+  name
+  description
+  sellerId
+  buyerId
+  issuedAt
+  orderAmount
+  price
+  orderStatus
+}

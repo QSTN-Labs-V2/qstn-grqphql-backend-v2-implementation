@@ -1,0 +1,2907 @@
+"""Access gating metadata"""
+scalar AccessGating
+
+enum AccountStatus {
+  AUTHORIZED
+  BANNED
+  CONFIRMED
+  PENDING
+}
+
+enum AccountType {
+  ADMIN
+  BUSINESS
+  ENDUSER
+  ROOT
+  UNKNOWN
+  UNKNOWNWALLET
+}
+
+type AllCryptoRewardInUSD {
+  amountUsd: Float
+  profileId: ProfileId!
+}
+
+type AnonymousUser {
+  anonId: ID!
+  createdAt: DateTime!
+  fingerprint: String!
+  profileId: Int
+  updatedAt: DateTime
+}
+
+input AnonymousUserQueryRequest {
+  fingerprint: String!
+  profileId: Int
+}
+
+"""The auth challenge result"""
+type AuthChallengeResult {
+  """The text to sign"""
+  text: String!
+}
+
+"""The authentication result"""
+type AuthenticationResult {
+  """The access token"""
+  accessToken: Jwt!
+
+  """The refresh token"""
+  refreshToken: Jwt!
+}
+
+type AverageInviteResponseTime {
+  averageResponseTimeHrs: Float
+  user: ProfileId
+}
+
+type AverageSurveyCompletionRatesByUser {
+  percentageCompletionAverage: Float
+  profileId: ProfileId
+}
+
+type AverageTimeCompletingSurvey {
+  averageTimePerServey: Float
+  user: ProfileId
+}
+
+type AverageTimeDraftingSurvey {
+  averageTimePerServey: Float
+  user: ProfileId
+}
+
+type AverageTimePerSession {
+  averageTimeHrs: Float
+  user: ProfileId
+}
+
+type AverageTimeWithdrawRewards {
+  avgHours: Float
+  user: ProfileId
+}
+
+type AverageUserRatingCompletedSurveys {
+  ratingAvg: Float
+  user: ProfileId
+}
+
+type AverageValueAccruedCashViaStripe {
+  lastSessionAccruedCashViaStripeValueInUSD: Float
+  lifetimeCashViaStripeValueInUSD: Float
+  sessionAverageAccruedCashViaStripeValueInUSD: Float
+  user: ProfileId
+}
+
+type AverageValueAccruedCryptocurrency {
+  lastSessionAccruedCryptoValueInUSD: Float
+  lifetimeCryptoValueInUSD: Float
+  sessionAverageAccruedCryptoValueInUSD: Float
+  user: ProfileId
+}
+
+type AverageValueSpentNFTMarketplace {
+  avgCashAmount: Float
+  user: ProfileId
+}
+
+input BanUnbanUserRequest {
+  """The action ban/unban type"""
+  actionType: String!
+
+  """The user profile ID"""
+  profileId: ProfileId!
+}
+
+"""Blockchain data scalar type"""
+scalar BlockchainData
+
+type BooleanElement {
+  correctAnswer: String
+  isRequired: Boolean!
+  name: String!
+  points: Int
+  title: String
+  type: SurveyElementType!
+}
+
+"""Business profile category"""
+scalar BusinessCategory
+
+"""Business search results"""
+type BusinessSearchResult {
+  items: [User!]!
+  pageInfo: PaginatedResultInfo!
+  type: SearchRequestTypes!
+}
+
+type Campaign {
+  campaignId: ID!
+  campaignType: SurveyCampaignType!
+  createdAt: DateTime!
+  description: String
+  surveys: [Survey!]!
+  title: String
+  updatedAt: DateTime
+  user: User!
+}
+
+input CategoriesRequest {
+  categories: [String]
+  profileIds: [ProfileId]
+}
+
+"""ChainId custom scalar type"""
+scalar ChainId
+
+"""The challenge request"""
+input ChallengeRequest {
+  """The email address you want to login with"""
+  email: Email!
+}
+
+"""Chart type data results"""
+type ChartDataLabels {
+  avgCompletionTime: Float
+  data: [Int!]
+  labels: [String!]
+  rankingCompletions: [RankTopCompletions]
+  totalBusiness: Int
+  totalCompletions: Int
+  totalPageviews: Int
+  totalSurveys: Int
+}
+
+"""CID custom scalar type"""
+scalar Cid
+
+"""ClaimId custom scalar type"""
+scalar ClaimId
+
+input ClaimMarketplaceOrderMediaRequest {
+  chainId: ChainId
+  mediaId: ID!
+  orderId: ID
+  ownerAddress: NearAddress!
+  profileId: ProfileId!
+}
+
+input ClaimSurveyMediaRequest {
+  chainId: ChainId
+  mediaId: ID!
+  ownerAddress: NearAddress!
+  profileId: ProfileId!
+  surveyId: SurveyId!
+}
+
+input ClaimSurveyRewardRequest {
+  chainId: ChainId
+  mediaId: ID
+  profileId: ProfileId!
+  surveyId: SurveyId!
+}
+
+type CommentElement {
+  correctAnswer: String
+  isRequired: Boolean!
+  name: String!
+  points: Int
+  title: String
+  type: SurveyElementType!
+}
+
+type CompletionTimeOfDay {
+  surveyCount: Int
+  timeOfDay: Int
+}
+
+"""ContentEncryptionKey scalar type"""
+scalar ContentEncryptionKey
+
+"""Contract address custom scalar type"""
+scalar ContractAddress
+
+type CorrelationSurveyComplexityAndCompletion {
+  completionRatio: Float
+  questionCount: Int
+  surveyId: Int
+}
+
+input CreateAnonymousUserRequest {
+  fingerprint: String!
+}
+
+input CreateEmbedSurveyResultRequest {
+  chainId: ChainId
+  fingerprint: String!
+  profileId: ProfileId
+  result: SurveyData!
+  rewardId: ID
+  rewardType: String
+  surveyId: ID!
+}
+
+input CreateFillingQueueRequest {
+  metadata: String
+  profileId: ProfileId!
+  status: String!
+  surveyId: SurveyId!
+  type: String!
+}
+
+input CreateMarketplaceOrderRequest {
+  chainId: ChainId
+  metadata: String
+  orderAmount: Int!
+  orderStatus: String!
+  orderType: String!
+  productId: Int!
+  profileId: ProfileId!
+}
+
+input CreateProductRequest {
+  chainId: ChainId
+  description: String!
+  duration: Int
+  image: String
+  mediaId: ID
+  metadata: String
+  name: String!
+  ownerId: String
+  price: Float!
+  productStatus: String!
+  productType: String!
+  profileId: ProfileId!
+  sellerId: ProfileId
+  whiteList: String
+}
+
+input CreateProfileRequest {
+  """The user account type"""
+  accountType: AccountType
+
+  """The user profile image"""
+  avatar: String
+
+  """The user bio"""
+  bio: String
+
+  """The business user name"""
+  businessName: String
+
+  """The business category"""
+  category: BusinessCategory
+
+  """The user display name"""
+  displayName: String
+
+  """The user email"""
+  email: Email
+
+  """The user first name"""
+  firstName: String
+
+  """The user Iden3 DID"""
+  iden3issuer: Did
+
+  """The enduser interests"""
+  interests: [BusinessCategory!]
+
+  """The user DID"""
+  issuer: Did
+
+  """User last login"""
+  lastLoginAt: UnixTimestamp!
+
+  """The user last name"""
+  lastName: String
+}
+
+input CreateSurveyGatingRequest {
+  """The profile id of the creator"""
+  profileId: ProfileId!
+  requirements: AccessGating!
+
+  """The Survey id"""
+  surveyId: SurveyId!
+}
+
+input CreateSurveyReferralRequest {
+  invitedEmail: Email!
+  profileId: ProfileId!
+  surveyId: SurveyId
+}
+
+input CreateSurveyResultRequest {
+  chainId: ChainId
+  profileId: ProfileId!
+  result: SurveyData!
+  rewardId: ID
+  rewardType: String
+  surveyId: ID!
+}
+
+input CreateSurveyRewardRequest {
+  chainId: ChainId
+  mediaId: ID
+  profileId: ProfileId!
+  rewardType: String!
+  surveyId: SurveyId!
+}
+
+input CreateUserBoostRequest {
+  endAt: DateTime!
+
+  """The user profile ID"""
+  profileId: ProfileId!
+}
+
+input CreateUserContractRequest {
+  contractAddress: ContractAddress!
+  contractName: String!
+  contractType: String!
+  funcCall: String!
+  input: String!
+  network: ChainId!
+  output: String!
+  ownerAddress: ContractAddress!
+
+  """The user profile ID"""
+  profileId: ProfileId!
+  surveyId: SurveyId
+}
+
+input CreateUserMembershipRequest {
+  endAt: DateTime!
+
+  """The user profile ID"""
+  profileId: ProfileId!
+}
+
+input CreateUserRefferalRequest {
+  invitedEmail: Email!
+  profileId: ProfileId!
+  surveyId: SurveyId
+}
+
+input CreateWalletRequest {
+  credit: Int!
+  profileId: ProfileId!
+  recipient: String
+}
+
+"""Survey result credibility data scalar type"""
+scalar CredibilityScore
+
+"""Business Data Types"""
+type CryptoIssued {
+  amountCrypto: Int
+  businessId: ProfileId!
+  cryptoValueInUSD: Float
+}
+
+type CryptoIssuedAllBlockchains {
+  businessId: ProfileId!
+  cryptoValueInUSD: Float
+}
+
+"""User Data Types"""
+type CryptoReward {
+  amountCrypto: Int
+  amountUsd: Float
+  profileId: ProfileId!
+}
+
+"""Cursor custom scalar type"""
+scalar Cursor
+
+"""The custom filters types"""
+enum CustomFiltersTypes {
+  QSTNSTAFF
+}
+
+type DataBusiness {
+  highestConversionRate: [HighestConversionRate]
+  highestNumberOfParticipantsEngaged: [HighestNumberOfParticipantsEngaged]
+  highestNumberOfSuccessfulSurveyCampaigns: [HighestNumberOfSuccessfulSurveyCampaigns]
+  mostCashValueIssuedViaSurveysViaStripe: [MostCashValueIssuedViaSurveysViaStripe]
+  mostCompletedSurveys: MostCompletedSurveys
+  mostCryptocurrencyValueIssuedViaSurveys: MostCryptocurrencyValueIssuedViaSurveys
+  mostDiverseSurveyTopicsCovered: [MostDiverseSurveyTopicsCovered]
+  mostIssuedSurveys: [MostIssuedSurveys]
+}
+
+type DataMarketplace {
+  averageInviteResponseTime: [AverageInviteResponseTime]
+  averageTimeDraftingSurvey: [AverageTimeDraftingSurvey]
+  correlationSurveyComplexityAndCompletion: [CorrelationSurveyComplexityAndCompletion]
+  fastestDraftSurvey: FastestDraftSurvey
+  mostCommonSurveyLengthPreferred: [MostCommonSurveyLengthPreferred]
+  rankedTagsIssuedSurveys: [RankedTagsIssuedSurveys]
+  slowestTimeDraftSurvey: SlowestTimeDraftSurvey
+  subscriptionHistoryMarketplace: [SubscriptionHistory]
+  subscriptionLevelMarketplace: [SubscriptionLevel]
+  unclaimedRewardStatusAndDuration: UnclaimedRewardStatusAndDuration
+  userAverageSessionTime: [UserAverageSessionTime]
+  walletsConnected: WalletsConnected
+}
+
+type DataUser {
+  averageTimeCompletingSurvey: [AverageTimeCompletingSurvey]
+  averageTimePerSession: [AverageTimePerSession]
+  averageTimeWithdrawRewards: [AverageTimeWithdrawRewards]
+  averageUserRatingCompletedSurveys: [AverageUserRatingCompletedSurveys]
+  averageValueAccruedCashViaStripe: [AverageValueAccruedCashViaStripe]
+  averageValueAccruedCryptocurrency: [AverageValueAccruedCryptocurrency]
+  averageValueSpentNFTMarketplace: [AverageValueSpentNFTMarketplace]
+  fastestCompleteSurvey: FastestCompleteSurvey
+  highestAverageSurveyCompletionRate: HighestAverageSurveyCompletionRate
+  highestNumberOfConsecutiveDaysWithSurveyCompletions: [HighestNumberOfConsecutiveDaysWithSurveyCompletions]
+  mostActiveParticipationInSpecificTypesOfSurveys: MostActiveParticipationInSpecificTypesOfSurveys
+  mostCommonTimeOfDaySurveyCompletitons: MostCommonTimeOfDaySurveyCompletitons
+  mostCompletedSurveysInSpecificCategory: [MostCompletedSurveysInSpecificCategory]
+  mostConsistentSurveyCompletionFrequency: MostConsistentSurveyCompletionFrequency
+  mostCreativeAndUniqueSurveyResponses: MostCreativeAndUniqueSurveyResponses
+  mostCryptocurrencySpentNFTMarketplace: MostCryptocurrencySpentNFTMarketplace
+  mostDollarsSpentNFTMarketplace: [MostDollarsSpentNFTMarketplace]
+  mostEarnedCashRewards: [MostEarnedCashRewards]
+  mostEarnedCryptocurrencyRewards: MostEarnedCryptocurrencyRewards
+  mostEngagementWithCommunityFeatures: [MostEngagementWithCommunityFeatures]
+  mostInvitedUsers: [MostInvitedUsers]
+  mostReferralsConvertedIntoActiveSurveyParticipants: [MostReferralsConvertedIntoActiveSurveyParticipants]
+  nFTMarketplacePurchaseHistory: NFTMarketplacePurchaseHistory
+  rankedTagsCompletedSurveys: [RankedTagsCompletedSurveys]
+  slowestCompleteSurvey: SlowestCompleteSurvey
+  subscriptionHistory: [SubscriptionHistory]
+  subscriptionLevel: [SubscriptionLevel]
+  surveyCompletionBasedOnQuestionCount: [SurveyCompletionBasedOnQuestionCount]
+  tutorialCompletitions: [TutorialCompletitions]
+  unclaimedRewardStatusAndDuration: UnclaimedRewardStatusAndDuration
+  userEngagementRateNFTMarketplace: [UserEngagementRateNFTMarketplace]
+  userMostCompletedSurveys: [UserMostCompletedSurveys]
+  walletsConnectedPerBlockchain: WalletsConnectedPerBlockchain
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+input DeleteFillingQueueRequest {
+  fillingId: ID!
+}
+
+input DeleteProductRequest {
+  productId: ID!
+}
+
+input DeleteSurveyResultRequest {
+  resultsId: ID!
+}
+
+input DeleteTransactionCreditRequest {
+  transactionId: ID!
+}
+
+input DeleteWalletRequest {
+  walletId: ID!
+}
+
+"""DID custom scalar type"""
+scalar Did
+
+"""Email scalar type"""
+scalar Email
+
+type EmbedSurveyResult {
+  chainId: ChainId
+  cidHash: Cid
+  claimId: ClaimId
+  createdAt: DateTime!
+  embedResultsId: ID!
+  fingerprint: String!
+  mediaClaimed: Boolean
+  mediaClaimedAt: DateTime
+  mediaClaimedFrom: NearAddress
+  result: SurveyData!
+  rewardClaimed: Boolean
+  rewardClaimedAt: DateTime
+  rewardId: ID
+  rewardType: String
+  survey: Survey
+}
+
+input EmbedSurveyResultQueryRequest {
+  """The result creation date"""
+  createdAt: DateTime
+  cursor: Cursor
+
+  """The anon participants ids"""
+  fingerprints: [String!]
+  limit: LimitScalar
+
+  """The participants ids"""
+  profileIds: [ProfileId!]
+
+  """The results ids"""
+  resultsIds: [ID!]
+
+  """The surveys ids"""
+  surveyIds: [SurveyId!]
+}
+
+"""EncryptedValue custom scalar type"""
+scalar EncryptedValueScalar
+
+"""Enduser search results"""
+type EnduserSearchResult {
+  items: [User!]!
+  pageInfo: PaginatedResultInfo!
+  type: SearchRequestTypes!
+}
+
+"""The nft type"""
+type Erc721 {
+  """aka "1" """
+  chainId: ChainId!
+
+  """aka "NearPunks" """
+  collectionName: String!
+
+  """aka "https://api.punks..." """
+  contentUri: String!
+
+  """aka genesis.nearpunksv10.near"""
+  contractAddress: ContractAddress!
+
+  """aka us NearPunks"""
+  contractName: String
+
+  """aka "Astalavista Baby. .... """
+  description: String!
+
+  """aka "ERC1155" """
+  ercType: String!
+
+  """aka "Terminator Punk" """
+  name: String!
+
+  """The NFT internal id"""
+  nftId: NftId!
+
+  """aka "{ uri:"https://ipfs....", metaType:"image/png" }" """
+  originalContent: NFTContent
+
+  """aka { address: owner.nearpunksv10.near, amount:"1" } """
+  owners: [Owner!]
+
+  """aka RARI"""
+  symbol: String!
+
+  """aka "13" """
+  tokenId: String
+}
+
+"""Evm address custom scalar type"""
+scalar EvmAddress
+
+type FastestCompleteSurvey {
+  near: [SurveyTakerInfo]
+  polkadot: [SurveyTakerInfo]
+  polygon: [SurveyTakerInfo]
+  total: [SurveyTakerInfo]
+}
+
+type FastestDraftSurvey {
+  near: [SurveyDrafterInfo]
+  polkadot: [SurveyDrafterInfo]
+  polygon: [SurveyDrafterInfo]
+  total: [SurveyDrafterInfo]
+}
+
+type FillingQueue {
+  claimId: String
+  completedAt: String
+  createdAt: String!
+  fillingId: ID!
+  fillingStatus: FillingStatus!
+  fillingType: FillingType!
+  metadata: EncryptedValueScalar
+  survey: Survey
+  updatedAt: String
+  user: User
+}
+
+input FillingQueueQueryRequest {
+  cursor: Cursor
+  isQueue: Boolean
+  limit: LimitScalar
+
+  """The creators ids"""
+  profileIds: [ProfileId!]
+  sorting: String
+
+  """The filling survey status"""
+  status: FillingStatus
+
+  """The surveys ids"""
+  surveyIds: [SurveyId!]
+
+  """The filling survey type"""
+  type: FillingType
+}
+
+enum FillingStatus {
+  COMPLETE
+  PENDING
+  STARTED
+}
+
+enum FillingType {
+  PRIVATE
+  PUBLIC
+  TUTORIAL
+}
+
+type GoodsOwnedMedia {
+  mediaId: String
+}
+
+type HighestAverageSurveyCompletionRate {
+  highestAverageSurveyCompletion: [AverageSurveyCompletionRatesByUser]
+}
+
+type HighestConversionRate {
+  businessId: Int!
+  conversionPercentageRate: Float
+  convertedPurchasers: Int
+  uniqueParticipants: Int
+}
+
+type HighestNumberOfConsecutiveDaysWithSurveyCompletions {
+  longestDailyStreak: Int
+  profileId: ProfileId!
+}
+
+type HighestNumberOfParticipantsEngaged {
+  businessId: ProfileId!
+  campaignId: Int
+  numberOfParticipants: Int
+}
+
+type HighestNumberOfSuccessfulSurveyCampaigns {
+  businessId: ProfileId!
+  numberOfSuccessfulCampaigns: Int
+}
+
+input Iden3IssuerProfileQueryRequest {
+  """The email for the profile"""
+  email: Email
+
+  """The profile iden3 did"""
+  iden3issuer: Did
+}
+
+"""Internal survey id custom scalar type"""
+scalar InternalSurveyId
+
+input InviteUserRequest {
+  """The user account type"""
+  accountType: AccountType!
+
+  """The user profile image"""
+  avatar: String
+
+  """The user bio"""
+  bio: String
+
+  """The user display name"""
+  displayName: String!
+
+  """The user email"""
+  email: Email!
+}
+
+input IssuerProfileQueryRequest {
+  """The email for the profile"""
+  email: Email
+
+  """The profile did"""
+  issuer: Did
+}
+
+"""jwt custom scalar type"""
+scalar Jwt
+
+input LeaderboardEntriesRequest {
+  cursor: Cursor
+  leaderboardId: Int!
+  limit: LimitScalar
+}
+
+"""leaderboard entries result"""
+type LeaderboardEntriesResult {
+  items: [LeaderboardEntry!]
+  pageInfo: PaginatedResultInfo
+}
+
+"""The leaderboard result info"""
+type LeaderboardEntry {
+  avatar: String
+  createdAt: DateTime
+  earnings: Float
+  iden3issuer: String
+  issuer: String
+  leaderboardEntryId: Int!
+  leaderboardId: Int!
+  points: Float
+  profileId: Int!
+  rank: Int
+  surveysuccess: Int
+}
+
+"""limit custom scalar type"""
+scalar LimitScalar
+
+"""Locale scalar type"""
+scalar Locale
+
+type MarketplaceOrder {
+  chainId: ChainId
+  createdAt: DateTime!
+  mediaClaimed: Boolean
+  mediaClaimedAt: DateTime
+  mediaClaimedFrom: NearAddress
+  metadata: String
+  orderAmount: Float!
+  orderId: ID!
+  orderStatus: String!
+  orderType: String!
+  paymentType: String!
+  productId: Int!
+  updatedAt: DateTime
+  user: User
+}
+
+input MarketplaceOrderQueryRequest {
+  """The order id"""
+  orderId: ID
+
+  """The product ids"""
+  productIds: [Int!]
+
+  """The profile ids"""
+  profileIds: [ProfileId!]
+
+  """The order status"""
+  status: String
+}
+
+input MarketplaceOrdersQueryRequest {
+  cursor: Cursor
+  limit: LimitScalar
+  status: String
+  type: String
+}
+
+type MarketplaceProduct {
+  chainId: ChainId
+  createdAt: DateTime!
+  description: String!
+  duration: Int
+  image: String
+  mediaId: String
+  metadata: String
+  name: String!
+  ownerId: String
+  price: Float
+  productId: ID!
+  productStatus: String!
+  productType: String!
+  sellerId: ProfileId
+  updatedAt: DateTime
+  whiteList: String
+}
+
+input MarketplaceRequest {
+  categories: [String]
+}
+
+"""Marketplace search results"""
+type MarketplaceSearchResult {
+  items: [MarketplaceProduct!]!
+  pageInfo: PaginatedResultInfo
+  type: SearchRequestTypes!
+}
+
+type Media {
+  cid: Cid
+  copiesLimit: Int!
+  createdAt: DateTime!
+  description: String
+  mediaId: ID!
+  name: String
+  owner: User
+  price: Float!
+  type: MediaType
+  whiteList: [User]
+}
+
+type MediaBoughtAndSold {
+  mediaId: String!
+}
+
+input MediaBoughtAndSoldRequest {
+  profileId: ProfileId!
+}
+
+type MediaSold {
+  mediaId: String
+}
+
+enum MediaType {
+  PRIVATE
+  PUBLIC
+}
+
+type Metadata {
+  copies: Int
+  description: String!
+  expiresAt: DateTime
+  extra: String
+  issuedAt: DateTime
+  media: String!
+  mediaHash: String
+  reference: String
+  referenceHash: String
+  startsAt: DateTime
+  title: String!
+  updatedAt: DateTime
+}
+
+"""mimetype custom scalar type"""
+scalar MimeType
+
+type MostActiveParticipationInSpecificTypesOfSurveys {
+  multipleChoiceSurveysRankings: [MultipleChoiceSurveys]
+  openEndedSurveysRankings: [OpenEndedSurveys]
+}
+
+type MostCashValueIssuedViaSurveysViaStripe {
+  amountCash: Float
+  businessId: ProfileId!
+}
+
+type MostCommonSurveyLengthPreferred {
+  questionCount: Int
+  surveysCompleted: Int
+}
+
+type MostCommonTimeOfDaySurveyCompletitons {
+  completionTimeOfDay: [CompletionTimeOfDay]
+  userCompletionTimeOfDay: UserCompletionTimeOfDay
+}
+
+type MostCompletedAll {
+  businessId: ProfileId
+  totalCompleted: Int
+}
+
+type MostCompletedNear {
+  businessId: ProfileId
+  numberOfSurveysNear: Int
+}
+
+type MostCompletedPolkadot {
+  businessId: ProfileId
+  numberOfSurveysPolkadot: Int
+}
+
+type MostCompletedPolygon {
+  businessId: ProfileId
+  numberOfSurveysPolygon: Int
+}
+
+type MostCompletedSurveys {
+  mostCompletedAll: [MostCompletedAll]
+  mostCompletedNear: [MostCompletedNear]
+  mostCompletedPolkadot: [MostCompletedPolkadot]
+  mostCompletedPolygon: [MostCompletedPolygon]
+}
+
+type MostCompletedSurveysInSpecificCategory {
+  categoryName: String
+  profileId: ProfileId!
+  surveysCompleted: Int
+}
+
+type MostConsistentSurveyCompletionFrequency {
+  daily: [UserCompletionFrequency]
+  monthly: [UserCompletionFrequency]
+  weekly: [UserCompletionFrequency]
+  yearly: [UserCompletionFrequency]
+}
+
+type MostCreativeAndUniqueSurveyResponses {
+  mediaRating: [Rating]
+  surveyResponseRating: [Rating]
+}
+
+type MostCryptocurrencySpentNFTMarketplace {
+  mostSpentNear: [CryptoReward]
+  mostSpentPolkadot: [CryptoReward]
+  mostSpentPolygon: [CryptoReward]
+}
+
+type MostCryptocurrencyValueIssuedViaSurveys {
+  mostIssuedInTotal: [CryptoIssuedAllBlockchains]
+  mostIssuedNear: [CryptoIssued]
+  mostIssuedPolkadot: [CryptoIssued]
+  mostIssuedPolygon: [CryptoIssued]
+}
+
+type MostDiverseSurveyTopicsCovered {
+  allTopics: [String]
+  businessId: ProfileId!
+  campaignId: Int
+  numberOfTopics: Int
+}
+
+type MostDollarsSpentNFTMarketplace {
+  profileId: ProfileId!
+  realDollarsSpent: Float
+}
+
+type MostEarnedCashRewards {
+  mostCashViaStripe: Float
+  profileId: ProfileId!
+}
+
+type MostEarnedCryptocurrencyRewards {
+  nearRewards: [CryptoReward]
+  polkadotRewards: [CryptoReward]
+  polygonRewards: [CryptoReward]
+  totalCryptoInCash: [AllCryptoRewardInUSD]
+}
+
+type MostEngagementWithCommunityFeatures {
+  profileId: ProfileId!
+  totalPosts: Int
+}
+
+type MostInvitedUsers {
+  profileId: ProfileId!
+  usersInvited: Int
+}
+
+type MostIssuedSurveys {
+  businessId: ProfileId!
+  numberOfSurveys: Int
+}
+
+type MostReferralsConvertedIntoActiveSurveyParticipants {
+  profileId: ProfileId!
+  referralsSent: Int
+  referredParticipantCount: Int
+}
+
+type MultipleChoiceSurveys {
+  multipleChoiceSurveys: Int
+  profileId: ProfileId!
+}
+
+type Mutation {
+  authenticate(request: SignedAuthChallenge!): AuthenticationResult!
+  banUnbanUser(request: BanUnbanUserRequest!): User!
+  claimMarketplaceOrderMedia(request: ClaimMarketplaceOrderMediaRequest!): MarketplaceOrder!
+  claimSurveyMedia(request: ClaimSurveyMediaRequest!): SurveyReward!
+  claimSurveyReward(request: ClaimSurveyRewardRequest!): SurveyReward!
+  createAnonymousUser(request: CreateAnonymousUserRequest!): AnonymousUser!
+  createEmbedSurveyResult(request: CreateEmbedSurveyResultRequest!): EmbedSurveyResult!
+
+  """Create a new ERC721 NFT gallery"""
+  createErc721NftGallery(request: NftGalleryCreateRequest!): NftGalleryId!
+  createFillingQueue(request: CreateFillingQueueRequest!): FillingQueue
+  createMarketplaceOrder(request: CreateMarketplaceOrderRequest!): MarketplaceOrder!
+
+  """Create a new NFT gallery"""
+  createNftGallery(request: NftGalleryCreateRequest!): NftGalleryId!
+  createProduct(request: CreateProductRequest!): MarketplaceProduct!
+  createProfile(request: CreateProfileRequest!): User!
+  createSurvey(request: SurveyCreateRequest!): Survey!
+  createSurveyGating(request: CreateSurveyGatingRequest!): SurveyGating!
+  createSurveyReferral(request: CreateSurveyReferralRequest!): SurveyReferral!
+  createSurveyResult(request: CreateSurveyResultRequest!): SurveyResult!
+  createSurveyReward(request: CreateSurveyRewardRequest!): SurveyReward!
+  createTransactionCredit(request: TransactionCreditRequest!): TransactionCredit!
+  createTransactionDebit(request: TransactionDebitRequest!): TransactionCredit!
+  createUserBoost(request: CreateUserBoostRequest!): UserBoost!
+  createUserContract(request: CreateUserContractRequest!): UserContract!
+  createUserMembership(request: CreateUserMembershipRequest!): UserMembership!
+  createUserRefferal(request: CreateUserRefferalRequest!): UserRefferal!
+  createWallet(request: CreateWalletRequest!): Wallet!
+  deleteFillingQueue(request: DeleteFillingQueueRequest!): Void
+
+  """Delete an NFT Gallery"""
+  deleteNftGallery(request: NftGalleryDeleteRequest!): Void
+  deleteProduct(request: DeleteProductRequest!): Void
+  deleteSurvey(request: SurveyDeleteRequest!): Void
+  deleteSurveyResult(request: DeleteSurveyResultRequest!): Void
+  deleteTransactionCredit(request: DeleteTransactionCreditRequest!): Void
+  deleteWallet(request: DeleteWalletRequest!): Boolean!
+  inviteUser(request: InviteUserRequest!): User!
+  refresh(request: RefreshRequest!): AuthenticationResult!
+  refundMarketplaceOrder(request: RefundMarketplaceOrderRequest!): MarketplaceOrder!
+  registryUserPrize(request: RegistryUserPrizeRequest!): UserPrize!
+  scoreSurveyResult(request: ScoreSurveyResultRequest!): SurveyResult!
+  syncMediaProducts(request: SyncMediaProductsRequest!): Void
+  syncNftGallery(request: SyncNftGalleryRequest!): Void
+  syncPageviewSources(request: SyncPageviewSourcesRequest!): Void
+  updateAnonymousUser(request: UpdateAnonymousUserRequest!): AnonymousUser!
+  updateEmbedSurveyResult(request: UpdateEmbedSurveyResultRequest!): EmbedSurveyResult!
+  updateFillingQueue(request: UpdateFillingQueueRequest!): FillingQueue!
+  updateMarketplaceOrder(request: UpdateMarketplaceOrderRequest!): MarketplaceOrder!
+
+  """Update the name of an NFT gallery"""
+  updateNftGalleryInfo(request: NftGalleryUpdateInfoRequest!): Void
+
+  """Add and/or remove NFTs to a gallery"""
+  updateNftGalleryItems(request: NftGalleryUpdateItemsRequest!): Void
+
+  """Update the order of NFTs in a gallery"""
+  updateNftGalleryOrder(request: NftGalleryUpdateItemOrderRequest!): Void
+  updateProduct(request: UpdateProductRequest!): MarketplaceProduct!
+  updateProfile(request: UpdateProfileRequest!): User!
+  updateSurvey(request: SurveyUpdateInfoRequest!): Survey!
+  updateSurveyGating(request: UpdateSurveyGatingRequest!): SurveyGating!
+  updateSurveyReferral(request: UpdateSurveyReferralRequest!): SurveyReferral!
+  updateSurveyResult(request: UpdateSurveyResultRequest!): SurveyResult!
+  updateSurveyReward(request: UpdateSurveyRewardRequest!): SurveyReward!
+  updateTransactionCredit(request: UpdateTransactionCreditRequest!): TransactionCredit!
+  updateUserBoost(request: UpdateUserBoostRequest!): UserBoost!
+  updateUserMembership(request: UpdateUserMembershipRequest!): UserMembership!
+  updateUserRefferal(request: UpdateUserRefferalRequest!): UserRefferal!
+  updateWallet(request: UpdateWalletRequest!): Wallet!
+  verifyUser(request: VerifyUserRequest!): User!
+}
+
+union NFT = Erc721 | Nep171
+
+"""The NFT content uri"""
+type NFTContent {
+  """The animated url"""
+  animatedUrl: String
+
+  """The token uri  nft"""
+  contentUri: String
+  image: String
+
+  """The meta type content"""
+  metaType: String
+
+  """The token uri  nft"""
+  uri: String
+}
+
+type NFTMarketplacePurchaseHistory {
+  purchaseAmountTotals: [PurchaseAmountTotals]
+  purchaseInfoHistory: [PurchaseInfoHistory]
+}
+
+"""Near address custom scalar type"""
+scalar NearAddress
+
+type Nep171 {
+  chainId: ChainId!
+  creatorId: ProfileId
+  duration: Int
+  evmContractAddress: ContractAddress
+  mediaClaimed: Boolean
+  mediaClaimedAt: DateTime
+  mediaClaimedFrom: NearAddress
+  metadata: Metadata!
+
+  """The NFT internal id"""
+  nftId: NftId!
+  orderId: ID
+  orderStatus: String
+  ownerId: NearAddress
+  price: Float
+  productId: Int
+  productStatus: String
+  productType: String
+  resultsId: ID
+  royalty: Float
+  sellerId: ProfileId
+  seriesId: Int!
+  surveyId: SurveyId
+}
+
+input NftGalleriesQueryRequest {
+  """The result creation date"""
+  createdAt: DateTime
+  cursor: Cursor
+  limit: LimitScalar
+
+  """The user media ids"""
+  mediaIds: [ID!]
+
+  """The surveys ids"""
+  nftGalleryIds: [NftGalleryId!]
+
+  """The creators ids"""
+  profileIds: [ProfileId!]
+}
+
+"""The NFT gallery input"""
+input NftGalleriesRequest {
+  """The profile id"""
+  profileId: ProfileId
+}
+
+"""The NFT gallery"""
+type NftGallery {
+  chainId: ChainId
+
+  """The creation date"""
+  createdAt: DateTime!
+
+  """The NFTs in the gallery"""
+  items: [NFT!]
+
+  """The NFT gallery name"""
+  name: String!
+
+  """The NFT gallery id"""
+  nftGalleryId: NftGalleryId!
+
+  """The owning profile id"""
+  profileId: ProfileId!
+
+  """The last update date"""
+  updatedAt: DateTime
+}
+
+"""The input for creating a new NFT gallery"""
+input NftGalleryCreateRequest {
+  """The chain ID of the NFT"""
+  chainId: ChainId
+
+  """The NFTs in the gallery"""
+  items: [NftInput!]!
+
+  """The name of the NFT gallery"""
+  name: NftGalleryName!
+
+  """The owner profile id"""
+  profileId: ProfileId!
+}
+
+"""The input for deleting gallery"""
+input NftGalleryDeleteRequest {
+  """The NFT gallery id"""
+  galleryId: NftGalleryId!
+
+  """The profile id of the gallery owner"""
+  profileId: ProfileId!
+}
+
+"""Nft gallery id type"""
+scalar NftGalleryId
+
+"""Nft gallery name type"""
+scalar NftGalleryName
+
+"""The input for updating NFT gallery name"""
+input NftGalleryUpdateInfoRequest {
+  """The NFT gallery id"""
+  galleryId: NftGalleryId!
+
+  """The name of the NFT gallery"""
+  name: NftGalleryName!
+
+  """The profile id of the gallery owner"""
+  profileId: ProfileId!
+}
+
+"""The input for reordering gallery items"""
+input NftGalleryUpdateItemOrderRequest {
+  """The NFT gallery id"""
+  galleryId: NftGalleryId!
+
+  """The profile id of the gallery owner"""
+  profileId: ProfileId!
+
+  """The order of the NFTs in the gallery"""
+  updates: [NftUpdateItemOrder!]!
+}
+
+"""The input for adding/removing gallery items"""
+input NftGalleryUpdateItemsRequest {
+  """The NFT gallery id"""
+  galleryId: NftGalleryId!
+
+  """The profile id of the gallery owner"""
+  profileId: ProfileId!
+
+  """The contents of the NFT gallery"""
+  toAdd: [NftInput!] = []
+
+  """The contents of the NFT gallery"""
+  toRemove: [NftInput!] = []
+}
+
+"""Nft id type"""
+scalar NftId
+
+"""The NFT profile image"""
+type NftImage {
+  """The token image nft"""
+  chainId: ChainId!
+
+  """The contract address"""
+  contractAddress: ContractAddress!
+
+  """registered date in the marketplace"""
+  createdAt: DateTime!
+  nftImageId: ID!
+
+  """The token id of the nft"""
+  tokenId: String!
+
+  """The token image nft"""
+  uri: Url!
+
+  """If the NFT is verified"""
+  verified: Boolean!
+}
+
+"""The NFT input for gallery"""
+input NftInput {
+  """The chain ID of the NFT"""
+  chainId: ChainId!
+
+  """The contents URI of the NFT"""
+  contentUri: String
+
+  """The contract address of the NFT"""
+  contractAddress: ContractAddress!
+
+  """The description of the NFT"""
+  description: String
+
+  """The erc type the NFT"""
+  ercType: String
+
+  """The name of the NFT"""
+  name: String
+
+  """The original contents of the NFT"""
+  originalContent: String
+
+  """The symbol of the NFT"""
+  symbol: String
+
+  """The token ID of the NFT"""
+  tokenId: String
+}
+
+input NftOwnershipChallenge {
+  """Chain Id"""
+  chainId: ChainId!
+
+  """ContractAddress for nft"""
+  contractAddress: ContractAddress!
+
+  """Token id for NFT"""
+  tokenId: String!
+}
+
+input NftOwnershipChallengeRequest {
+  """The wallet address which owns the NFT"""
+  nearAddress: NearAddress!
+  nfts: [NftOwnershipChallenge!]!
+}
+
+"""NFT ownership challenge result"""
+type NftOwnershipChallengeResult {
+  """Id of the nft ownership challenge"""
+  id: NftOwnershipId!
+  text: String!
+
+  """Timeout of the validation"""
+  timeout: TimestampScalar!
+}
+
+"""Nft ownership id type"""
+scalar NftOwnershipId
+
+"""NFT search results"""
+type NftSearchResult {
+  items: [NFT!]!
+  pageInfo: PaginatedResultInfo
+  type: SearchRequestTypes!
+}
+
+"""The input for updating the order of a NFT gallery item"""
+input NftUpdateItemOrder {
+  """The chain ID of the NFT"""
+  chainId: ChainId!
+
+  """The contract address of the NFT"""
+  contractAddress: ContractAddress!
+
+  """The new order of the NFT in the gallery"""
+  newOrder: Int!
+
+  """The token ID of the NFT"""
+  tokenId: String!
+}
+
+input NftsRequest {
+  """Chain Ids"""
+  chainIds: [ChainId!]
+
+  """Filter by contract address"""
+  contractAddress: ContractAddress
+
+  """The creator id"""
+  creatorIds: [ProfileId!]
+  cursor: Cursor
+  limit: LimitScalar
+
+  """The user media ids"""
+  mediaIds: [ID!]
+
+  """Filter by owner address"""
+  ownerAddress: NearAddress
+
+  """The profile id"""
+  profileIds: [ProfileId!]
+}
+
+"""The paginated nft result"""
+type NftsResult {
+  items: [NFT!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+"""Nonce custom scalar type"""
+scalar Nonce
+
+"""The notification id"""
+scalar NotificationId
+
+enum OnBoardingStatus {
+  COMPLETE
+  PENDING
+  TUTORIAL
+  WALLET
+}
+
+type OpenEndedSurveys {
+  openEndedSurveys: Int
+  profileId: ProfileId!
+}
+
+"""The nft type"""
+type Owner {
+  """aka mintify.near """
+  address: NearAddress!
+
+  """number of tokens owner"""
+  amount: Float!
+
+  """The owner profile id"""
+  profileId: ProfileId
+}
+
+type Pageview {
+  browser: String!
+  browserVersion: Int!
+  city: String!
+  currentUrl: String!
+  deviceId: String!
+  distinctId: String!
+  event: String!
+  id: ID!
+  initialReferrer: String!
+  initialReferringDomain: String!
+  insertId: String!
+  libVersion: String!
+  mpApiEndpoint: String!
+  mpApiTimestampMs: Int!
+  mpCountryCode: String!
+  mpLib: String!
+  mpProcessingTimeMs: Int!
+  os: String!
+  page: String!
+  region: String!
+  screenHeight: Int!
+  screenWidth: Int!
+  time: Int!
+  userId: String!
+}
+
+"""The paginated user result"""
+type PaginatedEmbedSurveyResult {
+  items: [Survey!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+"""The paginated user filling queue result"""
+type PaginatedEmbedSurveyResultResult {
+  items: [EmbedSurveyResult!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+"""The paginated user filling queue result"""
+type PaginatedFillingQueueResult {
+  items: [FillingQueue!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+"""The paginated marketplace orders result"""
+type PaginatedMarketplaceOrdersResult {
+  items: [MarketplaceOrder!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+"""The paginated nft gallery result"""
+type PaginatedNftGalleryResult {
+  items: [NftGallery!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+"""The paginated marketplace products result"""
+type PaginatedProductsResult {
+  items: [MarketplaceProduct!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+"""The paginated result info"""
+type PaginatedResultInfo {
+  """Cursor to query next results"""
+  next: Cursor
+
+  """Cursor to query the actual results"""
+  prev: Cursor
+
+  """
+  The total number of entities the pagination iterates over. If its null then its not been worked out due to it being an expensive query and not really needed for the client. All main counters are in counter tables to allow them to be faster fetching.
+  """
+  totalCount: Int @deprecated(reason: "Total counts is expensive and in dynamic nature of queries it slows stuff down. Most the time you do not need this you can just use the `next` property to see if there is more data. This will be removed soon. The only use case anyone is using this right now is on notification query, this should be changed to query the notifications and cache the last notification id. You can then keep checking if the id changes you know more notifications.")
+}
+
+"""The paginated user transactions result"""
+type PaginatedSurveyReferralResult {
+  items: [SurveyReferral!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+"""The paginated user result"""
+type PaginatedSurveyResult {
+  items: [Survey!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+"""The paginated user filling queue result"""
+type PaginatedSurveyResultResult {
+  items: [SurveyResult!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+"""The paginated user contracts result"""
+type PaginatedUserContractResult {
+  items: [UserContract!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+"""The paginated user transactions result"""
+type PaginatedUserRefferalResult {
+  items: [UserRefferal!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+"""The paginated user result"""
+type PaginatedUserResult {
+  items: [User!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+"""The paginated user transactions result"""
+type PaginatedUserTransactionResult {
+  items: [TransactionCredit!]!
+  pageInfo: PaginatedResultInfo!
+}
+
+enum PaymentMethods {
+  AMERICANEXPRESS
+  BITCOIN
+  MASTERCARD
+  NEAR
+  PAYPAL
+  STRIPE
+  USDT
+  VISA
+}
+
+input ProductQueryRequest {
+  """The product id"""
+  productId: ID!
+}
+
+input ProductsQueryRequest {
+  cursor: Cursor
+  limit: LimitScalar
+  sorting: String
+  status: String
+  type: String
+}
+
+"""ProfileId custom scalar type"""
+scalar ProfileId
+
+input ProfileQueryRequest {
+  """The profile is boosted?"""
+  boosted: Boolean
+
+  """The business ids"""
+  businessIds: [ProfileId!]
+
+  """The profile category (business)"""
+  category: [BusinessCategory!]
+  cursor: Cursor
+
+  """The emails for the profile"""
+  emails: [Email!]
+  limit: LimitScalar
+
+  """The enduser total ansr earned"""
+  numberOfAnsrEarned: Float
+
+  """The enduser total rewards earned"""
+  numberOfRewardsEarned: Float
+
+  """The enduser total successful invites"""
+  numberOfSuccessInvites: Float
+
+  """The published surveys number"""
+  numberOfSurveys: Int
+
+  """The enduser completed surveys number"""
+  numberOfSurveysCompleted: Int
+
+  """The near addresses"""
+  ownedBy: [NearAddress!]
+
+  """The profile ids"""
+  profileIds: [ProfileId!]
+
+  """Sorting asc / desc"""
+  sorting: String
+
+  """The profile status"""
+  status: [AccountStatus!]
+
+  """The profile type"""
+  type: AccountType
+
+  """The profile type"""
+  verified: String
+
+  """The profile visibility/membership"""
+  visibility: [Visibility!]
+}
+
+type PurchaseAmountTotals {
+  totalPurchasedConvertedInUSD: Float
+  user: ProfileId
+}
+
+type PurchaseHistory {
+  mediaId: String
+  productId: ID
+}
+
+input PurchaseHistoryPerUserRequest {
+  profileIds: [ProfileId!]
+}
+
+type PurchaseInfoHistory {
+  createdAt: String
+  orderAmountConvertedInUSD: Float
+  orderId: Int
+  orderStatus: String
+  user: ProfileId
+}
+
+type Query {
+  allMediaBoughtAndSoldAnalytics: [MediaBoughtAndSold]
+  anonymousUser(request: AnonymousUserQueryRequest!): AnonymousUser
+  challenge(request: ChallengeRequest!): AuthChallengeResult!
+  checkTransaction(request: TransactionHashRequest!): TransactionCredit
+  dataBusiness: DataBusiness
+  dataMarketplace(request: MarketplaceRequest): DataMarketplace
+  dataUser(request: CategoriesRequest): DataUser
+  embedSurveyResults(request: EmbedSurveyResultQueryRequest!): PaginatedEmbedSurveyResultResult!
+  fillingQueue(request: FillingQueueQueryRequest!): PaginatedFillingQueueResult!
+  goodsOwnedPerUserAnalytics: [GoodsOwnedMedia]
+
+  """Leaderboards for surveys"""
+  leaderboardEntries(request: LeaderboardEntriesRequest!): LeaderboardEntriesResult!
+  marketplaceOrder(request: MarketplaceOrderQueryRequest!): MarketplaceOrder
+
+  """Get all marketplace orders"""
+  marketplaceOrders(request: MarketplaceOrdersQueryRequest!): PaginatedMarketplaceOrdersResult!
+  mediaSoldByCompanyOrUserAnalytics(request: MediaBoughtAndSoldRequest!): [MediaSold]
+  methodsPromotions: [SurveyMethod]
+
+  """Get all NFT galleries for a profile"""
+  nftGalleries(request: NftGalleriesQueryRequest!): PaginatedNftGalleryResult!
+  nftOwnershipChallenge(request: NftOwnershipChallengeRequest!): NftOwnershipChallengeResult!
+  nftUserGalleries(request: NftGalleriesQueryRequest!): PaginatedNftGalleryResult!
+  nfts(request: NftsRequest!): NftsResult!
+  pageviews: [Pageview!]!
+  ping: String!
+  product(request: ProductQueryRequest!): MarketplaceProduct
+
+  """Get all products and medias available in the marketplace"""
+  products(request: ProductsQueryRequest!): PaginatedProductsResult!
+  purchaseHistoryPerUserAnalytics(request: PurchaseHistoryPerUserRequest!): [PurchaseHistory]
+  saleHistoryPerBusinessAnalytics(request: SaleHistoryPerBusinessRequest!): SaleHistory
+  search(request: SearchQueryRequest!): SearchResult!
+  subscriptionHistory(request: SubscriptionHistoryRequest): [UserSubscription]
+  subscriptionLevel(request: SubscriptionLevelRequest): UserSubscription
+  survey(request: SingleSurveyQueryRequest!): Survey
+
+  """Statistics and analytics for surveys"""
+  surveyAnalytics(request: SurveyAnalyticsRequest!): ChartDataLabels!
+  surveyGating(request: SurveyGatingQueryRequest!): SurveyGating!
+  surveyReferrals(request: SurveyReferralQueryRequest!): PaginatedSurveyReferralResult!
+  surveyResults(request: SurveyResultQueryRequest!): PaginatedSurveyResultResult!
+  surveyReward(request: SurveyRewardQueryRequest!): SurveyReward
+  surveyRewardErc721(request: SurveyRewardQueryRequest!): SurveyReward
+  surveys(request: SurveyQueryRequest!): PaginatedSurveyResult!
+  topBusiness(request: TopBusinessRequest!): ChartDataLabels!
+  user(request: SingleProfileQueryRequest!): User
+  userContract(request: UserContractQueryRequest!): UserContract
+  userContracts(request: UserContractsQueryRequest!): PaginatedUserContractResult!
+  userNfts(request: NftsRequest!): NftsResult!
+  userRefferals(request: UserRefferalQueryRequest!): PaginatedUserRefferalResult!
+  userTransactions(request: UserTransactionQueryRequest!): PaginatedUserTransactionResult!
+  userWallet(request: UserWalletQueryRequest!): Wallet
+  userbyIssuer(request: IssuerProfileQueryRequest!): User
+  userbyWalletIssuer(request: Iden3IssuerProfileQueryRequest!): User
+  users(request: ProfileQueryRequest!): PaginatedUserResult!
+  usersAdmin(request: ProfileQueryRequest!): PaginatedUserResult!
+  verify(request: VerifyRequest!): Boolean!
+}
+
+type Question {
+  createdAt: DateTime!
+  description: String!
+  surveyId: SurveyId!
+}
+
+type RadiogroupElement {
+  choices: [SurveyElementItemValueType!]
+  correctAnswer: String
+  isRequired: Boolean!
+  name: String!
+  points: Int
+  title: String
+  type: SurveyElementType!
+}
+
+type RankTopCompletions {
+  completions: Int
+  surveyId: ID
+}
+
+type RankedTagsCompletedSurveys {
+  category_tags: String
+  tag_count: Int
+}
+
+type RankedTagsIssuedSurveys {
+  categoryTags: String
+  tagCount: Int
+}
+
+type RankingElement {
+  choices: [SurveyElementItemValueType!]
+  correctAnswer: String
+  isRequired: Boolean!
+  name: String!
+  points: Int
+  title: String
+  type: SurveyElementType!
+}
+
+type Rating {
+  item_id: Int
+  profileId: ProfileId!
+  rating: Int
+}
+
+type RatingElement {
+  correctAnswer: String
+  isRequired: Boolean!
+  name: String!
+  points: Int
+  rateMax: Int
+  title: String
+  type: SurveyElementType!
+}
+
+"""The refresh request"""
+input RefreshRequest {
+  """The refresh token"""
+  refreshToken: Jwt!
+}
+
+input RefundMarketplaceOrderRequest {
+  orderId: ID!
+}
+
+input RegistryUserPrizeRequest {
+  profileId: ProfileId!
+  resultsId: ID!
+  rewardId: ID!
+  surveyId: SurveyId!
+}
+
+type Reward {
+  createdAt: DateTime!
+  mediaId: ID
+  profileId: ProfileId!
+  resultId: ID
+  rewardId: ID!
+  rewardType: String!
+  surveyId: SurveyId
+  updatedAt: DateTime
+}
+
+type SaleHistory {
+  items: [SaleItem]
+  total: Int
+}
+
+input SaleHistoryPerBusinessRequest {
+  profileIds: [ProfileId!]
+}
+
+type SaleItem {
+  buyerId: Int
+  description: String
+  issuedAt: DateTime
+  name: String
+  orderAmount: Float
+  orderStatus: String
+  price: Float
+  productId: Int
+  sellerId: Int
+}
+
+input ScoreSurveyResultRequest {
+  credibilityScore: CredibilityScore
+  resultsId: ID!
+  score: Int
+}
+
+"""Query search"""
+scalar Search
+
+input SearchQueryRequest {
+  cursor: Cursor
+  customFilters: [CustomFiltersTypes!] = []
+  limit: LimitScalar
+
+  """The search term"""
+  query: Search!
+  type: SearchRequestTypes!
+}
+
+"""Search request types"""
+enum SearchRequestTypes {
+  BUSINESSES
+  ENDUSERS
+  MARKETPLACE
+  NFTS
+  SURVEYS
+  TUTORIALS
+}
+
+union SearchResult = BusinessSearchResult | EnduserSearchResult | MarketplaceSearchResult | NftSearchResult | SurveySearchResult | TutorialSearchResult
+
+"""Relayer signature"""
+scalar Signature
+
+"""The signed auth challenge"""
+input SignedAuthChallenge {
+  """The email you signed the signature with"""
+  email: Email!
+
+  """The signature"""
+  signature: Signature!
+}
+
+input SingleProfileQueryRequest {
+  """The profile did"""
+  did: Did
+
+  """The email for the profile"""
+  email: Email
+
+  """The profile id"""
+  profileId: ProfileId
+}
+
+input SingleSurveyQueryRequest {
+  """The survey creator"""
+  profileId: ProfileId
+
+  """The survey id"""
+  surveyId: SurveyId!
+}
+
+type SlowestCompleteSurvey {
+  near: [SurveyTakerInfo]
+  polkadot: [SurveyTakerInfo]
+  polygon: [SurveyTakerInfo]
+  total: [SurveyTakerInfo]
+}
+
+type SlowestTimeDraftSurvey {
+  near: [SurveyDrafterInfo]
+  polkadot: [SurveyDrafterInfo]
+  polygon: [SurveyDrafterInfo]
+  total: [SurveyDrafterInfo]
+}
+
+type StatusAndDuration {
+  claimed: Boolean
+  duration: Float
+  surveyId: Int
+  user: ProfileId
+}
+
+"""Stripe account id custom scalar type"""
+scalar StripeAccountId
+
+type Subscription {
+  nftDataUpdated: [Nep171]
+}
+
+type SubscriptionHistory {
+  began: DateTime
+  ended: DateTime
+  subscription: String
+  user: ProfileId
+}
+
+input SubscriptionHistoryRequest {
+  profileId: ProfileId!
+}
+
+type SubscriptionLevel {
+  subscription: String
+  user: ProfileId
+}
+
+input SubscriptionLevelRequest {
+  profileId: ProfileId!
+}
+
+type Survey {
+  campaignType: SurveyCampaignType!
+  cidHash: Cid
+  claimId: ClaimId
+  completeText: String
+  completedHtml: String
+  createdAt: DateTime!
+  description: String
+  fillingStatus: String
+  firstPageIsStarted: Boolean
+  funded: Boolean
+  logo: String
+  mediaClaimed: Boolean
+  mediaClaimedAt: DateTime
+  mediaClaimedFrom: NearAddress
+  pageNextText: String
+  pages: [SurveyPage!]
+  privateKey: String
+  publicKey: String
+  publishedAt: DateTime
+  results: [SurveyResult]
+  resultsId: ID
+  rewardClaimed: Boolean
+  rewardClaimedAt: DateTime
+  rewardId: ID
+  rewardType: String
+  rewards: [SurveyReward]
+  showPrevButton: Boolean
+  showPreviewBeforeComplete: String
+  showQuestionNumbers: String
+  startSurveyText: String
+  surveyId: SurveyId!
+  surveyStatus: SurveyStatus!
+  surveyType: SurveyType!
+  tags: [Tag]
+  title: String
+  updatedAt: DateTime
+  user: User
+  whiteList: [Email]
+}
+
+input SurveyAnalyticsRequest {
+  """The business profileIds"""
+  businessIds: [ProfileId!]
+}
+
+enum SurveyCampaignType {
+  QUALITATIVE
+  QUANTITATIVE
+}
+
+type SurveyCompletionBasedOnQuestionCount {
+  completionRatio: Float
+  questionCount: Int
+}
+
+"""The input for creating a new Survey"""
+input SurveyCreateRequest {
+  """The survey campaign type"""
+  campaignType: SurveyCampaignType
+
+  """The description of the Survey"""
+  description: String
+
+  """The Survey logo"""
+  logo: String
+
+  """The Pages in the survey"""
+  pages: [SurveyPageInput!]!
+
+  """The creator profile id"""
+  profileId: ProfileId!
+
+  """The survey status"""
+  status: SurveyStatus!
+
+  """The title of the Survey"""
+  title: String
+
+  """The survey type"""
+  type: SurveyType!
+}
+
+"""Survey result data scalar type"""
+scalar SurveyData
+
+"""The input for deleting survey"""
+input SurveyDeleteRequest {
+  """The profile id of the creator"""
+  profileId: ProfileId
+
+  """The Survey id"""
+  surveyId: SurveyId!
+}
+
+type SurveyDrafterInfo {
+  hours: Float
+  surveyId: Int
+  user: ProfileId
+}
+
+union SurveyElement = BooleanElement | CommentElement | RadiogroupElement | RankingElement | RatingElement | TextElement
+
+input SurveyElementInput {
+  choices: [TextValueInput!]
+  correctAnswer: String
+  isRequired: Boolean!
+  name: String!
+  points: Int
+  rateMax: Int
+  title: String
+  type: SurveyElementType!
+}
+
+union SurveyElementItemValueType = TextValueType | ValueType
+
+enum SurveyElementType {
+  BOOLEAN
+  CHECKBOX
+  COMMENT
+  DROPDOWN
+  FILE
+  HTML
+  IMAGE
+  IMAGEPICKER
+  INPUT
+  MATRIXDROPDOWN
+  PANEL
+  PANELDYNAMIC
+  RADIOGROUP
+  RANKING
+  RATING
+  SIGNATUREPAD
+  TAGBOX
+  TEXT
+}
+
+type SurveyGating {
+  createdAt: DateTime!
+  gateId: ID!
+  profileId: Int
+  requirements: AccessGating!
+  surveyId: Int!
+  updatedAt: DateTime
+}
+
+input SurveyGatingQueryRequest {
+  """The profile id of the creator"""
+  profileId: ProfileId
+
+  """The Survey id"""
+  surveyId: SurveyId!
+}
+
+"""Survey id custom scalar type"""
+scalar SurveyId
+
+type SurveyMethod {
+  effectiveness: Float!
+  name: String!
+  totalCount: Int
+}
+
+type SurveyPage {
+  elements: [SurveyElement!]
+  name: String!
+  pages: [SurveyPage!]
+  title: String
+}
+
+input SurveyPageInput {
+  elements: [SurveyElementInput!]
+  name: String!
+  title: String
+}
+
+input SurveyQueryRequest {
+  """The creators ids"""
+  businessIds: [ProfileId!]
+  cursor: Cursor
+
+  """The survey ids to resume"""
+  fillingQueueIds: [SurveyId!]
+  limit: LimitScalar
+
+  """The endusers ids"""
+  profileIds: [ProfileId!]
+
+  """The survey status"""
+  status: [SurveyStatus!]
+
+  """The survey title"""
+  title: String
+
+  """The survey type"""
+  type: [SurveyType!]
+}
+
+type SurveyReferral {
+  """@joined existing user profile status"""
+  accountStatus: AccountStatus
+
+  """@joined existing user avatar"""
+  avatar: String
+  completedAt: DateTime
+  createdAt: DateTime!
+
+  """@joined existing user diplay name"""
+  displayName: String
+
+  """@joined existing user email"""
+  email: Email
+  invitedAt: DateTime
+  invitedEmail: Email!
+  invitedId: ProfileId
+  invitedStatus: String!
+  profileId: ProfileId!
+  referralId: ID!
+  referralStatus: String!
+  surveyId: SurveyId
+  updatedAt: DateTime
+}
+
+input SurveyReferralQueryRequest {
+  cursor: Cursor
+
+  """invited email addresses"""
+  emailAddresses: [Email!]
+  inviteStatus: String
+
+  """The invited ids"""
+  invitedIds: [ProfileId!]
+  limit: LimitScalar
+
+  """The sender ids"""
+  profileIds: [ProfileId!]
+  referralStatus: String
+
+  """The surveys ids"""
+  surveyIds: [SurveyId!]
+}
+
+type SurveyResult {
+  chainId: ChainId
+  cidHash: Cid
+  claimId: ClaimId
+  createdAt: DateTime!
+  credibilityScore: CredibilityScore
+  mediaClaimed: Boolean
+  mediaClaimedAt: DateTime
+  mediaClaimedFrom: NearAddress
+  result: SurveyData!
+  resultsId: ID!
+  rewardClaimed: Boolean
+  rewardClaimedAt: DateTime
+  rewardId: ID
+  rewardType: String
+  score: Int
+  survey: Survey
+  user: User
+}
+
+input SurveyResultQueryRequest {
+  """The result creation date"""
+  createdAt: DateTime
+  cursor: Cursor
+  limit: LimitScalar
+
+  """The creators ids"""
+  profileIds: [ProfileId!]
+
+  """The results ids"""
+  resultsIds: [ID!]
+
+  """The surveys ids"""
+  surveyIds: [SurveyId!]
+}
+
+type SurveyReward {
+  chainId: ChainId
+  createdAt: DateTime!
+  mediaId: ID
+  mediaPrize: NFT
+  profileId: ProfileId!
+  resultsId: ID
+  rewardId: ID!
+  rewardType: String!
+  surveyId: SurveyId!
+  updatedAt: DateTime
+}
+
+input SurveyRewardQueryRequest {
+  """The survey id"""
+  surveyId: SurveyId!
+}
+
+"""Survey search results"""
+type SurveySearchResult {
+  items: [Survey!]!
+  pageInfo: PaginatedResultInfo!
+  type: SearchRequestTypes!
+}
+
+enum SurveyStatus {
+  DRAFTED
+  PUBLISHED
+}
+
+type SurveyTakerInfo {
+  hours: Float
+  surveyId: Int
+  user: ProfileId
+}
+
+enum SurveyType {
+  PRIVATE
+  PUBLIC
+  TUTORIAL
+}
+
+"""The input for updating Survey Information"""
+input SurveyUpdateInfoRequest {
+  """The survey campaign type"""
+  campaignType: SurveyCampaignType
+
+  """The description of the Survey"""
+  description: String
+
+  """The survey is paid"""
+  funded: Boolean
+
+  """The Survey logo"""
+  logo: String
+
+  """The Pages in the survey"""
+  pages: [SurveyPageInput!]
+
+  """The profile id of the creator"""
+  profileId: ProfileId
+
+  """The survey status"""
+  status: SurveyStatus
+
+  """The Survey id"""
+  surveyId: SurveyId!
+
+  """The Survey tag/category"""
+  tags: [Tag]
+
+  """The title of the Survey"""
+  title: String
+
+  """The survey type"""
+  type: SurveyType
+
+  """The survey whitelist"""
+  whiteList: [Email]
+}
+
+"""Survey url scalar type"""
+scalar SurveyUrl
+
+input SyncMediaProductsRequest {
+  contractAddress: ContractAddress
+}
+
+input SyncNftGalleryRequest {
+  contractAddress: ContractAddress
+  profileId: ProfileId!
+}
+
+input SyncPageviewSourcesRequest {
+  time: Int!
+}
+
+"""Tag scalar type"""
+scalar Tag
+
+type TextElement {
+  correctAnswer: String
+  isRequired: Boolean!
+  name: String!
+  points: Int
+  title: String
+  type: SurveyElementType!
+}
+
+input TextValueInput {
+  text: String!
+  value: String!
+}
+
+type TextValueType {
+  text: String!
+  value: String!
+}
+
+"""timestamp date custom scalar type"""
+scalar TimestampScalar
+
+"""The NFT token id"""
+scalar TokenId
+
+input TopBusinessRequest {
+  """The business profileIds"""
+  businessIds: [ProfileId!]
+}
+
+type TransactionCredit {
+  amount: Float!
+  createdAt: String!
+  orderId: ID
+  receiver_id: ProfileId
+  survey: Survey
+  surveyResult: SurveyResult
+  transactionHash: TxHash
+  transactionId: ID!
+  transactionSource: String
+  transactionStatus: TransactionStatus!
+  transactionType: TransactionType!
+  user: User
+}
+
+input TransactionCreditRequest {
+  amount: Int!
+  hash: TxHash
+  orderId: ID
+  profileId: ProfileId!
+  resultsId: ID
+  source: String
+  status: TransactionStatus!
+  surveyId: SurveyId
+  type: TransactionType!
+}
+
+input TransactionDebitRequest {
+  amount: Int!
+  hash: TxHash
+  orderId: ID
+  profileId: ProfileId!
+  resultsId: ID
+  source: String
+  status: TransactionStatus!
+  surveyId: SurveyId
+  type: TransactionType!
+}
+
+"""The check transaction hash request"""
+input TransactionHashRequest {
+  """The transactionHash"""
+  transactionHash: TxHash
+}
+
+enum TransactionStatus {
+  COMPLETE
+  PENDING
+}
+
+enum TransactionType {
+  CREDIT
+  DEBIT
+}
+
+type TutorialCompletitions {
+  fillingStatus: Boolean
+  user: ProfileId
+}
+
+"""Tutorial search results"""
+type TutorialSearchResult {
+  items: [Survey!]!
+  pageInfo: PaginatedResultInfo!
+  type: SearchRequestTypes!
+}
+
+"""The tx hash"""
+scalar TxHash
+
+"""The tx id"""
+scalar TxId
+
+type UnclaimedRewardStatusAndDuration {
+  near: [StatusAndDuration]
+  polkadot: [StatusAndDuration]
+  polygon: [StatusAndDuration]
+  total: [StatusAndDuration]
+}
+
+"""UnixTimestamp custom scalar type"""
+scalar UnixTimestamp
+
+input UpdateAnonymousUserRequest {
+  fingerprint: String!
+  profileId: Int!
+}
+
+input UpdateEmbedSurveyResultRequest {
+  chainId: ChainId
+  cidHash: Cid
+  embedResultsId: ID!
+  mediaClaimed: Boolean
+  mediaClaimedAt: DateTime
+  mediaClaimedFrom: NearAddress
+  result: SurveyData
+  rewardClaimed: Boolean
+  rewardClaimedAt: DateTime
+}
+
+input UpdateFillingQueueRequest {
+  claimId: String
+  completedAt: DateTime
+  fillingId: ID!
+  metadata: String
+  status: String!
+  type: String!
+}
+
+input UpdateMarketplaceOrderRequest {
+  metadata: String
+  orderId: ID!
+  orderStatus: String!
+}
+
+input UpdateProductRequest {
+  chainId: ChainId
+  description: String
+  duration: Int
+  image: String
+  mediaId: ID
+  metadata: String
+  name: String
+  ownerId: String
+  price: Float
+  productId: ID!
+  productStatus: String
+  productType: String
+  sellerId: ProfileId
+  whiteList: String
+}
+
+input UpdateProfileRequest {
+  """The user account type"""
+  accountStatus: AccountStatus
+
+  """The user account type"""
+  accountType: AccountType
+
+  """The user age"""
+  age: Int
+
+  """The user profile image"""
+  avatar: String
+
+  """The user bio"""
+  bio: String
+
+  """The business user name"""
+  businessName: String
+
+  """The business category"""
+  category: BusinessCategory
+
+  """The user display name"""
+  displayName: String
+
+  """The user email"""
+  email: Email
+
+  """The user first name"""
+  firstName: String
+
+  """The user gender"""
+  gender: String
+
+  """The user Iden3 DID"""
+  iden3issuer: Did
+
+  """The enduser interests"""
+  interests: [BusinessCategory!]
+
+  """The user DID"""
+  issuer: Did
+  kycAttemptId: String
+
+  """User last login"""
+  lastLoginAt: UnixTimestamp
+
+  """The user last name"""
+  lastName: String
+
+  """The user location"""
+  location: String
+
+  """The user id"""
+  profileId: ProfileId
+
+  """The user verification status"""
+  verified: Boolean
+
+  """The user membership type"""
+  visibility: Visibility
+}
+
+input UpdateSurveyGatingRequest {
+  gateId: ID!
+
+  """The profile id of the creator"""
+  profileId: ProfileId
+  requirements: AccessGating!
+
+  """The Survey id"""
+  surveyId: SurveyId!
+}
+
+input UpdateSurveyReferralRequest {
+  completedAt: DateTime
+  invitedAt: DateTime
+  invitedEmail: Email
+  invitedId: ProfileId
+  invitedStatus: String
+  referralId: ID!
+  referralStatus: String
+}
+
+input UpdateSurveyResultRequest {
+  chainId: ChainId
+  cidHash: Cid
+  mediaClaimed: Boolean
+  mediaClaimedAt: DateTime
+  mediaClaimedFrom: NearAddress
+  result: SurveyData
+  resultsId: ID!
+  rewardClaimed: Boolean
+  rewardClaimedAt: DateTime
+}
+
+input UpdateSurveyRewardRequest {
+  chainId: ChainId
+  mediaId: ID
+  resultsId: ID
+  rewardId: ID
+}
+
+input UpdateTransactionCreditRequest {
+  amount: Int!
+  status: TransactionStatus!
+  transactionId: ID!
+}
+
+input UpdateUserBoostRequest {
+  boostId: ID!
+  boostStatus: String!
+  endAt: DateTime!
+
+  """The user profile ID"""
+  profileId: ProfileId!
+}
+
+input UpdateUserMembershipRequest {
+  endAt: DateTime!
+  membershipId: ID!
+  membershipStatus: String!
+
+  """The user profile ID"""
+  profileId: ProfileId!
+}
+
+input UpdateUserRefferalRequest {
+  completedAt: DateTime
+  invitedAt: DateTime
+  invitedEmail: Email
+  invitedId: ProfileId
+  invitedStatus: String
+  refferalId: ID!
+  refferalStatus: String
+}
+
+input UpdateWalletRequest {
+  auroraAddress: EvmAddress
+  avaxAddress: EvmAddress
+  baseAddress: EvmAddress
+  bitfinityAddress: EvmAddress
+  bobaAddress: EvmAddress
+  bscAddress: EvmAddress
+  credit: Int
+  cronosAddress: EvmAddress
+  ethereumAddress: EvmAddress
+  filecoinAddress: EvmAddress
+  hederaAddress: EvmAddress
+  icpAddress: String
+  moonbeamAddress: EvmAddress
+  nearAddress: NearAddress
+  opbnbAddress: EvmAddress
+  polkadotAddress: String
+  polygonAddress: EvmAddress
+  profileId: ProfileId!
+  recipient: NearAddress
+  solanaAddress: String
+  stellarAddress: String
+  stripeAccountId: StripeAccountId
+  tonAddress: String
+  walletId: ID!
+}
+
+"""Url scalar type"""
+scalar Url
+
+type User {
+  accountStatus: AccountStatus!
+  accountType: AccountType!
+  age: Int
+  apiKey: String
+  avatar: Url
+  bio: String
+  boosted: Boolean
+  businessName: String
+  category: BusinessCategory
+  createdAt: DateTime
+  displayName: String
+  elegibleSurveys: Int
+  email: Email
+  firstName: String
+  gender: String
+  iden3issuer: String
+  interests: [BusinessCategory]
+  inviter: ProfileId
+  issuer: String
+  kycAttemptId: String
+  lastLoginAt: DateTime
+  lastName: String
+  location: String
+  medias: [Media]
+  ownedMedias: [Media]
+  paymentMethod: PaymentMethods
+  pinCode: Int
+  profileId: ProfileId!
+  publishedSurveys: Int
+  referrals: [ProfileId]
+  surveys: [Survey]
+  surveysTaken: [Survey]
+  updatedAt: DateTime
+  verified: Boolean
+  visibility: Visibility!
+  wallet: Wallet
+}
+
+type UserAverageSessionTime {
+  averageTime: Float
+  user: ProfileId
+}
+
+type UserBanUnban {
+  banunbanId: ID!
+  banunbanStatus: String!
+  createdAt: DateTime!
+  profileId: ProfileId!
+}
+
+type UserBoost {
+  boostId: ID!
+  boostStatus: String!
+  createdAt: DateTime!
+  endAt: DateTime!
+  profileId: ProfileId!
+  startAt: DateTime!
+  updatedAt: DateTime
+}
+
+type UserCompletionFrequency {
+  frequencyAverage: Float
+  profileId: ProfileId!
+}
+
+type UserCompletionTimeOfDay {
+  completionTimeOfDay: [CompletionTimeOfDay]
+  user: ProfileId
+}
+
+type UserContract {
+  contractAddress: ContractAddress
+  contractId: Int!
+  contractName: String
+  contractType: String
+  createdAt: DateTime!
+  funcCall: String
+  input: String
+  network: String
+  output: String
+  ownerAddress: String
+  profileId: Int!
+  surveyId: Int
+}
+
+input UserContractQueryRequest {
+  network: String
+  profileIds: [ProfileId!]
+  surveyIds: [SurveyId!]
+}
+
+input UserContractsQueryRequest {
+  cursor: Cursor
+  limit: LimitScalar
+}
+
+type UserEngagementRateNFTMarketplace {
+  pageViews: Int
+  productsSelling: Int
+  purchaseCount: Int
+  surveysCreated: Int
+  surveysStarted: Int
+  surveysTaken: Int
+  user: ProfileId
+}
+
+type UserMembership {
+  createdAt: DateTime!
+  endAt: DateTime!
+  membershipId: ID!
+  membershipStatus: String!
+  profileId: ProfileId!
+  startAt: DateTime!
+  updatedAt: DateTime
+}
+
+type UserMostCompletedSurveys {
+  numberOfSurveys: Int
+  profileId: ProfileId!
+}
+
+type UserPrize {
+  chainId: ChainId
+  createdAt: String!
+  prizeId: ID!
+  profileId: ProfileId!
+  resultId: ID!
+  rewardId: ID!
+  surveyId: SurveyId!
+}
+
+type UserRefferal {
+  """@joined existing user profile status"""
+  accountStatus: AccountStatus
+
+  """@joined existing user avatar"""
+  avatar: String
+  completedAt: DateTime
+  createdAt: DateTime!
+
+  """@joined existing user diplay name"""
+  displayName: String
+
+  """@joined existing user email"""
+  email: Email
+  invitedAt: DateTime
+  invitedEmail: Email!
+  invitedId: ProfileId
+  invitedStatus: String!
+  profileId: ProfileId!
+  refferalId: ID!
+  refferalStatus: String!
+  surveyId: SurveyId
+  updatedAt: DateTime
+}
+
+input UserRefferalQueryRequest {
+  cursor: Cursor
+
+  """invited email addresses"""
+  emailAddresses: [Email!]
+  inviteStatus: String
+
+  """The invited ids"""
+  invitedIds: [ProfileId!]
+  limit: LimitScalar
+
+  """The sender ids"""
+  profileIds: [ProfileId!]
+  referralStatus: String
+
+  """The surveys ids"""
+  surveyIds: [SurveyId!]
+}
+
+type UserSubscription {
+  endDate: String
+  id: ID
+  startDate: String
+  subscriptionLevel: String!
+}
+
+input UserTransactionQueryRequest {
+  cursor: Cursor
+
+  """The user DID"""
+  did: Did
+  hash: TxHash
+  isBalance: Boolean
+  limit: LimitScalar
+
+  """The sender ids"""
+  profileIds: [ProfileId!]
+
+  """The transaction credit status"""
+  status: TransactionStatus
+
+  """The surveys ids"""
+  surveyIds: [SurveyId!]
+
+  """The transaction credit type"""
+  type: TransactionType
+}
+
+type UserVerification {
+  createdAt: DateTime!
+  profileId: ProfileId!
+  verificationId: ID!
+  verificationStatus: String!
+}
+
+input UserWalletQueryRequest {
+  did: Did
+  profileId: ProfileId
+}
+
+type UserWalletsConnected {
+  user: ProfileId
+  walletCount: Int
+}
+
+type ValueType {
+  value: String!
+}
+
+"""The access request"""
+input VerifyRequest {
+  """The access token"""
+  accessToken: Jwt!
+}
+
+input VerifyUserRequest {
+  """The user profile ID"""
+  profileId: ProfileId!
+}
+
+enum Visibility {
+  BASIC
+  PREMIUM
+}
+
+"""Represents NULL values"""
+scalar Void
+
+type Wallet {
+  auroraAddress: EvmAddress
+  avaxAddress: EvmAddress
+  baseAddress: EvmAddress
+  bitfinityAddress: EvmAddress
+  bobaAddress: EvmAddress
+  bscAddress: EvmAddress
+  createdAt: DateTime!
+  credit: Float!
+  cronosAddress: EvmAddress
+  ethereumAddress: EvmAddress
+  filecoinAddress: EvmAddress
+  hederaAddress: EvmAddress
+  icpAddress: String
+  moonbeamAddress: EvmAddress
+  nearAddress: NearAddress
+  opbnbAddress: EvmAddress
+  polkadotAddress: String
+  polygonAddress: EvmAddress
+  recipient: Email
+  solanaAddress: String
+  stellarAddress: String
+  stripeAccountId: StripeAccountId
+  tonAddress: String
+  updatedAt: DateTime
+  user: User
+  walletId: ID!
+}
+
+type WalletsConnected {
+  near: Int
+  polkadot: Int
+  polygon: Int
+}
+
+type WalletsConnectedPerBlockchain {
+  near: [UserWalletsConnected]
+  polkadot: [UserWalletsConnected]
+  polygon: [UserWalletsConnected]
+}

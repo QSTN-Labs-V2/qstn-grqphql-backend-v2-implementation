@@ -1,0 +1,13 @@
+UPDATE users
+SET session_info = '[{"session_id": 0, "session_period": 1334}, {"session_id": 1, "session_period": 3004}, {"session_id": 2, "session_period": 4504}]'::jsonb
+WHERE profile_id = 2829;
+
+UPDATE users
+SET session_info = '[{"session_id": 0, "session_period": 3456}, {"session_id": 1, "session_period": 7543}, {"session_id": 2, "session_period": 6564}]'::jsonb
+WHERE profile_id = 2832;
+
+UPDATE users
+SET session_info = '[{"session_id": 0, "session_period": 5432}, {"session_id": 1, "session_period": 4356}, {"session_id": 2, "session_period": 7824}]'::jsonb
+WHERE profile_id = 2744;
+
+

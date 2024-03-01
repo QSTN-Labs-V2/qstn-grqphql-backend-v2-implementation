@@ -1,0 +1,22 @@
+subscription NftDataUpdated {
+  nftDataUpdated {
+    nftId
+    seriesId
+    metadata {
+      title
+      description
+      media
+      mediaHash
+      copies
+      issuedAt
+      expiresAt
+      startsAt
+      updatedAt
+      extra
+      reference
+      referenceHash
+    }
+    royalty
+    ownerId
+  }
+}

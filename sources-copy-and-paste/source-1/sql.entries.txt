@@ -1,0 +1,66 @@
+INSERT INTO users (first_name, account_type, inviter, email)                                                                                                                           
+VALUES ('CalInvitedTest', 'ENDUSER', 903, 'CalTest01@mail.com');
+
+INSERT INTO users (first_name, account_type, inviter, email)                                                                                                                           
+VALUES ('CalInvitedTest', 'ENDUSER', 903, 'CalTest01@mail.com');
+
+INSERT INTO users (first_name, account_type, inviter, email)                                                                                                                           
+VALUES ('CalInvitedTest', 'ENDUSER', 903, 'CalTest02@mail.com');
+
+INSERT INTO users (first_name, account_type, inviter, email)
+VALUES ('CalInvitedTest', 'ENDUSER', 903, 'CalTest03@mail.com');
+INSERT INTO users (first_name, account_type, inviter, email)                                                                                                                           
+VALUES ('CalInvitedTest', 'ENDUSER', 903, 'CalTest04@mail.com');
+
+INSERT INTO users (first_name, account_type, inviter, email)                                                                                                                           
+VALUES ('CalInvitedTest', 'ENDUSER', 904, 'CalTest05@mail.com');
+
+INSERT INTO users (first_name, account_type, inviter, email)                                                                                                                          
+VALUES ('CalInvitedTest', 'ENDUSER', 904, 'CalTest06@mail.com');
+
+INSERT INTO users (first_name, account_type, inviter, email)                                                                                                                           
+VALUES ('CalInvitedTest', 'ENDUSER', 904, 'CalTest07@mail.com');
+
+INSERT INTO users (first_name, account_type, inviter, email)                                                                                                                           
+VALUES ('CalInvitedTest', 'ENDUSER', 905, 'CalTest08@mail.com');
+
+INSERT INTO users (first_name, account_type, inviter, email)                                                                                                                           
+VALUES ('CalInvitedTest', 'ENDUSER', 905, 'CalTest09@mail.com');
+
+INSERT INTO filling_queue (profile_id, survey_id)
+VALUES (2827, 40);
+
+INSERT INTO filling_queue (profile_id, survey_id)
+VALUES (2830, 40);
+
+INSERT INTO filling_queue (profile_id, survey_id)
+VALUES (2831, 40);
+
+INSERT INTO filling_queue (profile_id, survey_id)
+VALUES (2831, 42);
+
+INSERT INTO filling_queue (profile_id, survey_id)
+VALUES (2833, 40);
+
+INSERT INTO filling_queue (profile_id, survey_id)
+VALUES (2834, 42);
+
+INSERT INTO filling_queue (profile_id, survey_id)
+VALUES (2835, 40);
+
+INSERT INTO filling_queue (profile_id, survey_id)
+VALUES (2836, 42);
+
+UPDATE users 
+SET posts = COALESCE(posts, '[]'::jsonb) || '{"post_id": 1, "text": "my first post"}'::jsonb
+WHERE profile_id = 2830;
+
+UPDATE users 
+SET posts = COALESCE(posts, '[]'::jsonb) || '{"post_id": 1, "text": "first post ever!"}'::jsonb
+WHERE profile_id = 2831;
+
+UPDATE users 
+SET posts = COALESCE(posts, '[]'::jsonb) || '{"post_id": 1, "text": "first post ever!"}'::jsonb
+|| '{"post_id": 2, "text": "new post"}'::jsonb
+|| '{"post_id": 3, "text": "awesome post"}'::jsonb
+WHERE profile_id = 2831;

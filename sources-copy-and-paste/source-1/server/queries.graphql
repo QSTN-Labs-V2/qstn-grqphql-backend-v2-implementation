@@ -1,0 +1,17 @@
+query SurveyAnalytics($request: SurveyAnalyticsRequest!) {
+  surveyAnalytics(request: $request) {
+    ...ChartDataLabelsFields
+  }
+}
+
+query TopBusiness($request: TopBusinessRequest!) {
+  topBusiness(request: $request) {
+    ...ChartDataLabelsFields
+  }
+}
+
+query DataUserRequest($request: CategoriesRequest) {
+  dataUser(request: $request) {
+    ...DataUserFields
+  }
+}

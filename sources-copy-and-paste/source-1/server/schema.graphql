@@ -1,0 +1,328 @@
+schema {
+  query: Query
+}
+
+"ProfileId custom scalar type"
+scalar ProfileId
+scalar Date
+
+type Query {
+  "Statistics and analytics for surveys"
+  surveyAnalytics(request: SurveyAnalyticsRequest!): ChartDataLabels!
+  topBusiness(request: TopBusinessRequest!): ChartDataLabels!
+  ping: String!
+
+  allMediaBoughtAndSold: [MediaBoughtAndSold]
+  mediaSoldByCompanyOrUser(request: MediaBoughtAndSoldRequest): [MediaSold]
+  saleHistoryPerBusiness(request: SaleHistoryPerBusinessRequest): SaleHistory
+  purchaseHistoryPerUser(
+    request: purchaseHistoryPerUserRequest
+  ): [PurchaseHistory]
+  goodsOwnedPerUser: [GoodsOwnedMedia]
+  dataUser(request: CategoriesRequest): DataUser
+  dataBusiness: DataBusiness
+}
+
+"Chart type data results"
+type ChartDataLabels {
+  labels: [String!]
+  data: [Int!]
+  totalSurveys: Int
+  totalCompletions: Int
+  totalBusiness: Int
+  totalSurveys: Int
+  rankingCompletions: [RankTopCompletions]
+  avgCompletionTime: Float
+  totalPageviews: Int
+}
+
+input SurveyAnalyticsRequest {
+  "The business profileIds"
+  businessIds: [ProfileId!]
+}
+
+input TopBusinessRequest {
+  "The business profileIds"
+  businessIds: [ProfileId!]
+}
+
+type RankTopCompletions {
+  surveyId: ID
+  completions: Int
+}
+
+input MediaBoughtAndSoldRequest {
+  profileId: ProfileId!
+}
+
+input SaleHistoryPerBusinessRequest {
+  profileIds: [ProfileId!]
+}
+
+input purchaseHistoryPerUserRequest {
+  profileIds: [ProfileId!]
+}
+
+type MediaBoughtAndSold {
+  mediaId: String!
+}
+
+type MediaSold {
+  mediaId: String
+}
+
+type SaleItem {
+  productId: Int
+  name: String
+  description: String
+  sellerId: Int
+  buyerId: Int
+  issuedAt: Date
+  orderAmount: Float
+  price: Float
+  orderStatus: String
+}
+
+type SaleHistory {
+  items: [SaleItem]
+  total: Int
+}
+
+type PurchaseHistory {
+  productId: ID
+  mediaId: String
+}
+
+type GoodsOwnedMedia {
+  mediaId: String
+}
+
+"User Data Types"
+type CryptoReward {
+  profileId: ProfileId!
+  amountCrypto: Int
+  amountUsd: Float
+}
+
+type AllCryptoRewardInUSD {
+  profileId: ProfileId!
+  amountUsd: Float
+}
+
+type AverageSurveyCompletionRatesByUser {
+  profileId: ProfileId
+  percentageCompletionAverage: Float
+}
+
+type UserCompletionFrequency {
+  profileId: ProfileId!
+  frequencyAverage: Float
+}
+
+type Rating {
+  profileId: ProfileId!
+  item_id: Int
+  rating: Int
+}
+
+input CategoriesRequest {
+  categories: [String]
+}
+
+type UserMostCompletedSurveys {
+  profileId: ProfileId!
+  numberOfSurveys: Int
+}
+
+type MostEarnedCashRewards {
+  profileId: ProfileId!
+  mostCashViaStripe: Float
+}
+
+type MostEarnedCryptocurrencyRewards {
+  nearRewards: [CryptoReward]
+  polkadotRewards: [CryptoReward]
+  polygonRewards: [CryptoReward]
+  totalCryptoInCash: [AllCryptoRewardInUSD]
+}
+
+type MostDollarsSpentNFTMarketplace {
+  profileId: ProfileId!
+  realDollarsSpent: Float
+}
+
+type MostCryptocurrencySpentNFTMarketplace {
+  mostSpentNear: [CryptoReward]
+  mostSpentPolkadot: [CryptoReward]
+  mostSpentPolygon: [CryptoReward]
+}
+
+type MostInvitedUsers {
+  profileId: ProfileId!
+  usersInvited: Int
+}
+
+type MostCompletedSurveysInSpecificCategory {
+  profileId: ProfileId!
+  categoryName: String
+  surveysCompleted: Int
+}
+
+type HighestAverageSurveyCompletionRate {
+  highestAverageSurveyCompletion: [AverageSurveyCompletionRatesByUser]
+}
+
+type MostConsistentSurveyCompletionFrequency {
+  daily: [UserCompletionFrequency]
+  weekly: [UserCompletionFrequency]
+  monthly: [UserCompletionFrequency]
+  yearly: [UserCompletionFrequency]
+}
+
+type HighestNumberOfConsecutiveDaysWithSurveyCompletions {
+  profileId: ProfileId!
+  longestDailyStreak: Int
+}
+
+type MultipleChoiceSurveys {
+  profileId: ProfileId!
+  multipleChoiceSurveys: Int
+}
+
+type OpenEndedSurveys {
+  profileId: ProfileId!
+  openEndedSurveys: Int
+}
+
+type MostActiveParticipationInSpecificTypesOfSurveys {
+  multipleChoiceSurveysRankings: [MultipleChoiceSurveys]
+  openEndedSurveysRankings: [OpenEndedSurveys]
+}
+
+type MostReferralsConvertedIntoActiveSurveyParticipants {
+  profileId: ProfileId!
+  referralsSent: Int
+  referredParticipantCount: Int
+}
+
+type MostEngagementWithCommunityFeatures {
+  profileId: ProfileId!
+  totalPosts: Int
+}
+
+type MostCreativeAndUniqueSurveyResponses {
+  surveyResponseRating: [Rating]
+  mediaRating: [Rating]
+}
+
+"Business Data Types"
+type CryptoIssued {
+  businessId: ProfileId!
+  amountCrypto: Int
+  cryptoValueInUSD: Float
+}
+
+type CryptoIssuedAllBlockchains {
+  businessId: ProfileId!
+  cryptoValueInUSD: Float
+}
+
+type MostIssuedSurveys {
+  businessId: ProfileId!
+  numberOfSurveys: Int
+}
+
+type MostCompletedAll {
+  businessId: ProfileId
+  totalCompleted: Int
+}
+type MostCompletedNear {
+  businessId: ProfileId
+  numberOfSurveysNear: Int
+}
+type MostCompletedPolkadot {
+  businessId: ProfileId
+  numberOfSurveysPolkadot: Int
+}
+type MostCompletedPolygon {
+  businessId: ProfileId
+  numberOfSurveysPolygon: Int
+}
+
+type MostCompletedSurveys {
+  mostCompletedAll: [MostCompletedAll]
+  mostCompletedNear: [MostCompletedNear]
+  mostCompletedPolkadot: [MostCompletedPolkadot]
+  mostCompletedPolygon: [MostCompletedPolygon]
+}
+
+type MostCryptocurrencyValueIssuedViaSurveys {
+  mostIssuedNear: [CryptoIssued]
+  mostIssuedPolkadot: [CryptoIssued]
+  mostIssuedPolygon: [CryptoIssued]
+  mostIssuedInTotal: [CryptoIssuedAllBlockchains]
+}
+
+type MostCashValueIssuedViaSurveysViaStripe {
+  businessId: ProfileId!
+  amountCash: Float
+}
+
+type HighestNumberOfSuccessfulSurveyCampaigns {
+  businessId: ProfileId!
+  numberOfSuccessfulCampaigns: Int
+}
+
+type MostDiverseSurveyTopicsCovered {
+  businessId: ProfileId!
+  campaignId: Int
+  numberOfTopics: Int
+  allTopics: [String]
+}
+
+type HighestNumberOfParticipantsEngaged {
+  businessId: ProfileId!
+  campaignId: Int
+  numberOfParticipants: Int
+}
+
+type HighestConversionRate {
+  businessId: Int!
+  conversionPercentageRate: Float
+  uniqueParticipants: Int
+  convertedPurchasers: Int
+}
+
+type DataUser {
+  userMostCompletedSurveys: [UserMostCompletedSurveys]
+  mostEarnedCashRewards: [MostEarnedCashRewards]
+  mostEarnedCryptocurrencyRewards: MostEarnedCryptocurrencyRewards
+  mostDollarsSpentNFTMarketplace: [MostDollarsSpentNFTMarketplace]
+  mostCryptocurrencySpentNFTMarketplace: MostCryptocurrencySpentNFTMarketplace
+  mostInvitedUsers: [MostInvitedUsers]
+  mostCompletedSurveysInSpecificCategory: [MostCompletedSurveysInSpecificCategory]
+  highestAverageSurveyCompletionRate: HighestAverageSurveyCompletionRate
+  mostConsistentSurveyCompletionFrequency: MostConsistentSurveyCompletionFrequency
+  highestNumberOfConsecutiveDaysWithSurveyCompletions: [HighestNumberOfConsecutiveDaysWithSurveyCompletions]
+  mostActiveParticipationInSpecificTypesOfSurveys: MostActiveParticipationInSpecificTypesOfSurveys
+  mostReferralsConvertedIntoActiveSurveyParticipants: [MostReferralsConvertedIntoActiveSurveyParticipants]
+  mostEngagementWithCommunityFeatures: [MostEngagementWithCommunityFeatures]
+  mostCreativeAndUniqueSurveyResponses: MostCreativeAndUniqueSurveyResponses
+}
+
+type DataBusiness {
+  mostIssuedSurveys: [MostIssuedSurveys]
+  mostCompletedSurveys: MostCompletedSurveys
+  mostCryptocurrencyValueIssuedViaSurveys: MostCryptocurrencyValueIssuedViaSurveys
+  mostCashValueIssuedViaSurveysViaStripe: [MostCashValueIssuedViaSurveysViaStripe]
+  highestNumberOfSuccessfulSurveyCampaigns: [HighestNumberOfSuccessfulSurveyCampaigns]
+  mostDiverseSurveyTopicsCovered: [MostDiverseSurveyTopicsCovered]
+  highestNumberOfParticipantsEngaged: [HighestNumberOfParticipantsEngaged]
+  highestConversionRate: [HighestConversionRate]
+}
+
+"Exposes a URL that specifies the behaviour of this scalar."
+directive @specifiedBy(
+  "The URL that specifies the behaviour of this scalar."
+  url: String!
+) on SCALAR

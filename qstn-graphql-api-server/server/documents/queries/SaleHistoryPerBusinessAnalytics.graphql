@@ -1,0 +1,8 @@
+query SaleHistoryPerBusinessAnalytics($request: SaleHistoryPerBusinessRequest!) {
+  saleHistoryPerBusinessAnalytics(request: $request) {
+    items {
+    ...SaleItemFields
+    }
+    total
+  }
+}

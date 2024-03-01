@@ -1,0 +1,378 @@
+schema {
+  query: Query
+}
+
+"ProfileId custom scalar type"
+scalar ProfileId
+scalar Date
+
+type Query {
+  "Statistics and analytics for surveys"
+  surveyAnalytics(request: SurveyAnalyticsRequest!): ChartDataLabels!
+  topBusiness(request: TopBusinessRequest!): ChartDataLabels!
+  ping: String!
+
+  allMediaBoughtAndSold: [MediaBoughtAndSold]
+  mediaSoldByCompanyOrUser(request: MediaBoughtAndSoldRequest): [MediaSold]
+  saleHistoryPerBusiness(request: SaleHistoryPerBusinessRequest): SaleHistory
+  purchaseHistoryPerUser(
+    request: purchaseHistoryPerUserRequest
+  ): [PurchaseHistory]
+  goodsOwnedPerUser: [GoodsOwnedMedia]
+  dataUser(request: UserRequest): DataUser
+  dataMarketplace(request: MarketplaceRequest): DataMarketplace
+}
+
+"Chart type data results"
+type ChartDataLabels {
+  labels: [String!]
+  data: [Int!]
+  totalSurveys: Int
+  totalCompletions: Int
+  totalBusiness: Int
+  totalSurveys: Int
+  rankingCompletions: [RankTopCompletions]
+  avgCompletionTime: Float
+  totalPageviews: Int
+}
+
+input SurveyAnalyticsRequest {
+  "The business profileIds"
+  businessIds: [ProfileId!]
+}
+
+input TopBusinessRequest {
+  "The business profileIds"
+  businessIds: [ProfileId!]
+}
+
+type RankTopCompletions {
+  surveyId: ID
+  completions: Int
+}
+
+input MediaBoughtAndSoldRequest {
+  profileId: ProfileId!
+}
+
+input SaleHistoryPerBusinessRequest {
+  profileIds: [ProfileId!]
+}
+
+input purchaseHistoryPerUserRequest {
+  profileIds: [ProfileId!]
+}
+
+input UserRequest {
+  profileIds: [ProfileId]
+  categories: [String]
+}
+
+input MarketplaceRequest {
+  categories: [String]
+}
+
+type MediaBoughtAndSold {
+  mediaId: String!
+}
+
+type MediaSold {
+  mediaId: String
+}
+
+type SaleItem {
+  productId: Int
+  name: String
+  description: String
+  sellerId: Int
+  buyerId: Int
+  issuedAt: Date
+  orderAmount: Float
+  price: Float
+  orderStatus: String
+}
+
+type SaleHistory {
+  items: [SaleItem]
+  total: Int
+}
+
+type PurchaseHistory {
+  productId: ID
+  mediaId: String
+}
+
+type GoodsOwnedMedia {
+  mediaId: String
+}
+
+type DataUser {
+  fastestCompleteSurvey: FastestCompleteSurvey
+  slowestCompleteSurvey: SlowestCompleteSurvey
+  unclaimedRewardStatusAndDuration: UnclaimedRewardStatusAndDuration
+  tutorialCompletitions: [TutorialCompletitions]
+  walletsConnectedPerBlockchain: WalletsConnectedPerBlockchain
+  averageTimePerSession: [AverageTimePerSession]
+  averageTimeCompletingSurvey: [AverageTimeCompletingSurvey]
+  averageTimeWithdrawRewards: [AverageTimeWithdrawRewards]
+  averageValueSpentNFTMarketplace: [AverageValueSpentNFTMarketplace]
+  averageValueAccruedCryptocurrency: [AverageValueAccruedCryptocurrency]
+  averageValueAccruedCashViaStripe: [AverageValueAccruedCashViaStripe]
+  nFTMarketplacePurchaseHistory: NFTMarketplacePurchaseHistory
+  rankedTagsCompletedSurveys: [RankedTagsCompletedSurveys]
+  mostCommonTimeOfDaySurveyCompletitons: MostCommonTimeOfDaySurveyCompletitons
+  surveyCompletionBasedOnQuestionCount: [SurveyCompletionBasedOnQuestionCount]
+  averageUserRatingCompletedSurveys: [AverageUserRatingCompletedSurveys]
+  userEngagementRateNFTMarketplace: [UserEngagementRateNFTMarketplace]
+  subscriptionLevel: [SubscriptionLevel]
+  subscriptionHistory: [SubscriptionHistory]
+}
+
+type SurveyTakerInfo {
+  surveyId: Int
+  user: ProfileId
+  hours: Float
+}
+
+type FastestCompleteSurvey {
+  total: [SurveyTakerInfo]
+  polkadot: [SurveyTakerInfo]
+  near: [SurveyTakerInfo]
+  polygon: [SurveyTakerInfo]
+}
+
+type SlowestCompleteSurvey {
+  total: [SurveyTakerInfo]
+  polkadot: [SurveyTakerInfo]
+  near: [SurveyTakerInfo]
+  polygon: [SurveyTakerInfo]
+}
+
+type StatusAndDuration {
+  user: ProfileId
+  surveyId: Int
+  claimed: Boolean
+  duration: Float
+}
+
+type UnclaimedRewardStatusAndDuration {
+  total: [StatusAndDuration]
+  polkadot: [StatusAndDuration]
+  near: [StatusAndDuration]
+  polygon: [StatusAndDuration]
+}
+
+type TutorialCompletitions {
+  user: ProfileId
+  fillingStatus: Boolean
+}
+
+type UserWalletsConnected {
+  user: ProfileId
+  walletCount: Int
+}
+
+type WalletsConnectedPerBlockchain {
+  near: [UserWalletsConnected]
+  polkadot: [UserWalletsConnected]
+  polygon: [UserWalletsConnected]
+}
+
+type AverageTimePerSession {
+  user: ProfileId
+  averageTimeHrs: Float
+}
+
+type AverageTimeCompletingSurvey {
+  user: ProfileId
+  averageTimePerServey: Float
+}
+
+type AverageTimeWithdrawRewards {
+  user: ProfileId
+  avgHours: Float
+}
+
+type AverageValueSpentNFTMarketplace {
+  user: ProfileId
+  avgCashAmount: Float
+}
+
+type AverageValueAccruedCryptocurrency {
+  user: ProfileId
+  lifetimeCryptoValueInUSD: Float
+  sessionAverageAccruedCryptoValueInUSD: Float
+  lastSessionAccruedCryptoValueInUSD: Float
+}
+
+type AverageValueAccruedCashViaStripe {
+  user: ProfileId
+  lifetimeCashViaStripeValueInUSD: Float
+  sessionAverageAccruedCashViaStripeValueInUSD: Float
+  lastSessionAccruedCashViaStripeValueInUSD: Float
+}
+
+type PurchaseAmountTotals {
+  user: ProfileId
+  totalPurchasedConvertedInUSD: Float
+}
+
+type PurchaseInfoHistory {
+  user: ProfileId
+  orderStatus: String
+  orderId: Int
+  createdAt: String
+  orderAmountConvertedInUSD: Float
+}
+
+type NFTMarketplacePurchaseHistory {
+  purchaseInfoHistory: [PurchaseInfoHistory]
+  purchaseAmountTotals: [PurchaseAmountTotals]
+}
+
+type RankedTagsCompletedSurveys {
+  category_tags: String
+  tag_count: Int
+}
+
+type CompletionTimeOfDay {
+  timeOfDay: Int
+  surveyCount: Int
+}
+
+type UserCompletionTimeOfDay {
+  user: ProfileId
+  completionTimeOfDay: [CompletionTimeOfDay]
+}
+
+type MostCommonTimeOfDaySurveyCompletitons {
+  completionTimeOfDay: [CompletionTimeOfDay]
+  userCompletionTimeOfDay: UserCompletionTimeOfDay
+}
+
+type SurveyCompletionBasedOnQuestionCount {
+  questionCount: Int
+  completionRatio: Float
+}
+
+type AverageUserRatingCompletedSurveys {
+  user: ProfileId
+  ratingAvg: Float
+}
+
+type UserEngagementRateNFTMarketplace {
+  user: ProfileId
+  pageViews: Int
+  purchaseCount: Int
+  productsSelling: Int
+  surveysCreated: Int
+  surveysStarted: Int
+  surveysTaken: Int
+}
+
+type SubscriptionLevel {
+  user: ProfileId
+  subscription: String
+}
+
+type SubscriptionHistory {
+  user: ProfileId
+  subscription: String
+  began: Date
+  ended: Date
+}
+
+type DataMarketplace {
+  fastestDraftSurvey: FastestDraftSurvey
+  slowestTimeDraftSurvey: SlowestTimeDraftSurvey
+  unclaimedRewardStatusAndDuration: UnclaimedRewardStatusAndDuration
+  walletsConnected: WalletsConnected
+  userAverageSessionTime: [UserAverageSessionTime]
+  averageTimeDraftingSurvey: [AverageTimeDraftingSurvey]
+  # averageTimeLoadRewards: AverageTimeLoadRewards
+  rankedTagsIssuedSurveys: [RankedTagsIssuedSurveys]
+  mostCommonSurveyLengthPreferred: [MostCommonSurveyLengthPreferred]
+  averageInviteResponseTime: [AverageInviteResponseTime]
+  correlationSurveyComplexityAndCompletion: [CorrelationSurveyComplexityAndCompletion]
+  # conversionRateSurveysToNFTPurchases: ConversionRateSurveysToNFTPurchases
+  # mostEffectiveMethodsAttractingSurveyParticipants: MostEffectiveMethodsAttractingSurveyParticipants
+  subscriptionLevelMarketplace: [SubscriptionLevel]
+  subscriptionHistoryMarketplace: [SubscriptionHistory]
+}
+
+type SurveyDrafterInfo {
+  surveyId: Int
+  user: ProfileId
+  hours: Float
+}
+
+type FastestDraftSurvey {
+  total: [SurveyDrafterInfo]
+  polkadot: [SurveyDrafterInfo]
+  near: [SurveyDrafterInfo]
+  polygon: [SurveyDrafterInfo]
+}
+
+type SlowestTimeDraftSurvey {
+  total: [SurveyDrafterInfo]
+  polkadot: [SurveyDrafterInfo]
+  near: [SurveyDrafterInfo]
+  polygon: [SurveyDrafterInfo]
+}
+
+# type StatusAndDuration {
+#   user: ProfileId
+#   surveyId: Int
+#   claimed: Boolean
+#   duration: Float
+# }
+
+# type UnclaimedRewardStatusAndDuration {
+#   total: [StatusAndDuration]
+#   polkadot: [StatusAndDuration]
+#   near: [StatusAndDuration]
+#   polygon: [StatusAndDuration]
+# }
+
+type WalletsConnected {
+  near: Int
+  polkadot: Int
+  polygon: Int
+}
+
+type UserAverageSessionTime {
+  user: ProfileId
+  averageTime: Float
+}
+
+type AverageTimeDraftingSurvey {
+  user: ProfileId
+  averageTimePerServey: Float
+}
+
+type RankedTagsIssuedSurveys {
+  categoryTags: String
+  tagCount: Int
+}
+
+type MostCommonSurveyLengthPreferred {
+  questionCount: Int
+  surveysCompleted: Int
+}
+
+type AverageInviteResponseTime {
+  user: ProfileId
+  averageResponseTimeHrs: Float
+}
+
+type CorrelationSurveyComplexityAndCompletion {
+  surveyId: Int
+  completionRatio: Float
+  questionCount: Int
+}
+
+"Exposes a URL that specifies the behaviour of this scalar."
+directive @specifiedBy(
+  "The URL that specifies the behaviour of this scalar."
+  url: String!
+) on SCALAR
